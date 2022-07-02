@@ -1,4 +1,4 @@
-package com.example.helloworld;
+package live.videosdk.rtc.android.java;
 import android.widget.ImageView;
 
 import java.util.LinkedList;
@@ -7,7 +7,7 @@ import java.util.List;
 public class User {
     private String email;
     private String userName;
-    private List<String> friendList;
+    private LinkedList<String> friendList;
 
     public User (){}
     public User(String userName, String email)
@@ -25,16 +25,15 @@ public class User {
         this.userName = userName;
     }
 
-
     public String getEmail() {
-        return email;
+        return this.email;
     }
 
     public String getUserName() {
-        return userName;
+        return this.userName;
     }
 
-    public String getFriendList() {
+    public LinkedList<String> getFriendList() {
         return friendList;
     }
 
@@ -43,7 +42,6 @@ public class User {
     }
 
     public void deleteFriend(User friend) {
-        if(this.friendList.contains(friend.getUserName()))
-
+        this.friendList.remove(friend.getUserName());
     }
 }

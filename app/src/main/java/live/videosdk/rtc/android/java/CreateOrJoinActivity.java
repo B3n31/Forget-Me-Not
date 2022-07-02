@@ -17,6 +17,8 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,6 +27,7 @@ public class CreateOrJoinActivity extends AppCompatActivity {
 
     private final String AUTH_TOKEN = BuildConfig.AUTH_TOKEN;
     private final String AUTH_URL = BuildConfig.AUTH_URL;
+    private FirebaseAuth mAuth;
 
     private EditText etMeetingId;
 
@@ -42,6 +45,9 @@ public class CreateOrJoinActivity extends AppCompatActivity {
 
         final Button btnCreate = findViewById(R.id.btnCreateMeeting);
         final Button btnJoin = findViewById(R.id.btnJoinMeeting);
+        final Button btnLogOut = findViewById(R.id.btnLogOut);
+
+        mAuth = FirebaseAuth.getInstance();
 
         etMeetingId = findViewById(R.id.etMeetingId);
 
@@ -60,6 +66,12 @@ public class CreateOrJoinActivity extends AppCompatActivity {
             } else {
                 getToken(meetingId);
             }
+        });
+
+        //sign out
+        btnLogOut.setOnClickListener(v -> {
+            mAuth.signOut();
+            startActivity(new Intent(CreateOrJoinActivity.this, LoginActivity.class));
         });
 
     }

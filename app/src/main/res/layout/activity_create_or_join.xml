@@ -63,6 +63,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/join_meeting" />
+
+        <Button
+            android:id="@+id/btnLogOut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="logout"
+            android:layout_marginTop="60dp"/>
     </LinearLayout>
 
 
