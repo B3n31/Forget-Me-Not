@@ -9,9 +9,21 @@ If you your root directory have this file, please move to step 3. Otherwise, cre
 
 ### Step 2: Add this your SDK directory to your project
 
-sdk.dir=C\:\\Users\\your_user_name\\AppData\\Local\\Android\\Sdk
+For windows users:
+sdk.dir = C\:\\Users\\your_user_name\\AppData\\Local\\Android\\Sdk
+
+For Mac users:
+sdk.dir=/Users/your_user_name/Library/Android/sdk
+
+For Linux (Ubuntu) users:
+sdk.dir = /home/your_user_name/Android/Sdk
+
+Where your_user_name is your user name of your operating syste. Also, make sure the folder is sdk or Sdk. Since some operating system is very case sensitive for the directory name.
 
 The Andriod SDK folder should be in this directory. If you do not see this, there might be error in your installation.
+
+In case adding the sdk.dir to local.properties does not work for Window, add ANDROID_HOME variable in "Environment Variables" as C:\Users\your_user_name\AppData\Local\Android\Sdk
+
 
 ### Step 3: Add auth_token
 
