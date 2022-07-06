@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -42,11 +43,20 @@ public class CreateOrJoinActivity extends AppCompatActivity {
 
         final Button btnCreate = findViewById(R.id.btnCreateMeeting);
         final Button btnJoin = findViewById(R.id.btnJoinMeeting);
-
+        final Button friendBut = findViewById(R.id.Friend_Button);
+        final Button returnToMain = findViewById(R.id.returnToMainButton);
         etMeetingId = findViewById(R.id.etMeetingId);
 
         btnCreate.setOnClickListener(v -> {
             getToken(null);
+        });
+        friendBut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(CreateOrJoinActivity.this, FriendsActivity.class);
+
+                startActivity(i);
+            }
         });
 
         btnJoin.setOnClickListener(v -> {

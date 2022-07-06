@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "885004802403",
+    "project_id": "forget-me-not-42f8e",
+    "storage_bucket": "forget-me-not-42f8e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:885004802403:android:eccfba691d85afecfe1b56",
+        "android_client_info": {
+          "package_name": "live.videosdk.rtc.android.java"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "885004802403-d5gpoc2cqnbseldipluilrtlksq79cgr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAs0ic48VBCHWpkiFr1wyk7I3HrtRhQOQA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "885004802403-d5gpoc2cqnbseldipluilrtlksq79cgr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

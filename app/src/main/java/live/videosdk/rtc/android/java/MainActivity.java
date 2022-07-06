@@ -10,14 +10,17 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.media.projection.MediaProjectionManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -32,6 +35,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
 
@@ -39,6 +46,7 @@ import org.webrtc.RendererCommon;
 import org.webrtc.SurfaceViewRenderer;
 import org.webrtc.VideoTrack;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -65,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton btnMic, btnWebcam, btnScreenShare;
     private FloatingActionButton btnLeave, btnChat, btnSwitchCameraMode, btnMore;
     private ImageButton btnAudioSelection;
+    private Button musicBtn, pauseBtn, stopBtn;
 
     private boolean micEnabled = true;
     private boolean webcamEnabled = true;
@@ -80,18 +89,31 @@ public class MainActivity extends AppCompatActivity {
     private static final int CAPTURE_PERMISSION_REQUEST_CODE = 1;
 
     private Timer timer = new Timer();
+    MediaPlayer mediaPlayer;
 
+    // creating a string for storing
+    // our audio url from firebase.
+    String audioUrl;
+
+    // creating a variable for our Firebase Database.
+    FirebaseDatabase firebaseDatabase;
+
+    // creating a variable for our
+    // Database Reference for Firebase.
+    DatabaseReference databaseReference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //
         btnLeave = findViewById(R.id.btnLeave);
         btnChat = findViewById(R.id.btnChat);
         btnMore = findViewById(R.id.btnMore);
         btnSwitchCameraMode = findViewById(R.id.btnSwitchCameraMode);
         btnScreenShare = findViewById(R.id.btnScreenShare);
+
+        musicBtn = findViewById(R.id.musicBtn);
+        pauseBtn = findViewById(R.id.pauseBtn);
+        stopBtn = findViewById(R.id.stopBtn);
 
         btnAudioSelection = (ImageButton) findViewById(R.id.btnAudioSelection);
         btnAudioSelection.setEnabled(false);
@@ -102,7 +124,34 @@ public class MainActivity extends AppCompatActivity {
         btnMic = findViewById(R.id.btnMic);
         btnWebcam = findViewById(R.id.btnWebcam);
 
-        final String token = getIntent().getStringExtra("token");
+        final MediaPlayer mp=new MediaPlayer();
+        musicBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                try{
+                    //you can change the path, here path is external directory(e.g. sdcard) /Music/maine.mp3
+                    mp.setDataSource("https://firebasestorage.googleapis.com/v0/b/forget-me-not-42f8e.appspot.com/o/Take%20Me%20Out%20To%20the%20Ball%20Game%20(1908).mp3?alt=media&token=80338860-64bb-4146-b894-e709e3b0d3f6");
+
+                    mp.prepare();
+                }catch(Exception e){e.printStackTrace();}
+                mp.start();
+            }
+        });
+        pauseBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mp.pause();
+            }
+        });
+        stopBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mp.stop();
+            }
+        });
+
+    final String token = getIntent().getStringExtra("token");
         final String meetingId = getIntent().getStringExtra("meetingId");
         micEnabled = getIntent().getBooleanExtra("micEnabled", true);
         webcamEnabled = getIntent().getBooleanExtra("webcamEnabled", true);
@@ -697,6 +746,8 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         showLeaveOrEndDialog();
     }
+
+
 
     @Override
     protected void onDestroy() {

@@ -18,4 +18,6 @@
     <string name="notificationTitle">VideoSDK RTC is sharing your screen</string>
     <string name="notificationContent">meeting is running</string>
     <string name="audio_options">Audio Options</string>
+    <string name="friends">Friends</string>
+    <string name="return_to_main">Return To Main</string>
 </resources>
