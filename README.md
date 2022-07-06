@@ -10,7 +10,7 @@ If you your root directory have this file, please move to step 3. Otherwise, cre
 ### Step 2: Add this your SDK directory to your project
 
 **For windows users:** <br>
-sdk.dir = C\\\:\\\Users\\\your_user_name\\\AppData\\\Local\\\Android\\\Sdk
+sdk.dir = C:\\\Users\\\your_user_name\\\AppData\\\Local\\\Android\\\Sdk
 
 **For Mac users:** <br>
 sdk.dir=/Users/your_user_name/Library/Android/sdk
@@ -18,7 +18,7 @@ sdk.dir=/Users/your_user_name/Library/Android/sdk
 **For Linux (Ubuntu) users:**<br>
 sdk.dir = /home/your_user_name/Android/Sdk
 
-Where your_user_name is your user name of your operating syste. Also, make sure the folder is sdk or Sdk. Since some operating system is very case sensitive for the directory name.
+Where your_user_name is your user name of your operating syste. Also, make sure the folder is sdk or Sdk since some operating system is very case sensitive for the directory name.
 
 The Andriod SDK folder should be in this directory. If you do not see this, there might be error in your installation.
 
