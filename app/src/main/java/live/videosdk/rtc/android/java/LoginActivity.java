@@ -35,7 +35,6 @@ public class LoginActivity extends AppCompatActivity {
         RegisterBtn = findViewById(R.id.ToRegisterBtn);
 
 
-
         // Firebase Auth
         auth = FirebaseAuth.getInstance();
 
@@ -85,5 +84,4 @@ public class LoginActivity extends AppCompatActivity {
 
 
     }
-
 }

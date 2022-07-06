@@ -26,13 +26,11 @@ public class RegisterActivity extends AppCompatActivity {
 
     //widgets
     EditText userET, passET, emailET;
-    Button registerBtn, toLoginBtn;
+    Button registerBtn, backBtn;
 
     //Firebase
     FirebaseAuth auth;
     DatabaseReference myRef;
-
-
 
 
     @Override
@@ -45,10 +43,11 @@ public class RegisterActivity extends AppCompatActivity {
         passET = findViewById(R.id.passwordEditText);
         emailET = findViewById(R.id.emailEditText);
         registerBtn = findViewById(R.id.buttonRegister);
-        toLoginBtn = findViewById(R.id.ToLoginBtn);
+        backBtn = findViewById(R.id.buttonBack);
 
         // Firebase Auth
         auth = FirebaseAuth.getInstance();
+
 
         // Adding Event Listener to Button Register
         registerBtn.setOnClickListener(new View.OnClickListener(){
@@ -63,18 +62,20 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(RegisterActivity.this, "Please Fill All Fields", Toast.LENGTH_SHORT).show();
                 }else{
                     RegisterNow(username_text, email_text, pass_text);
-                    startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
                 }
             }
         });
 
-        toLoginBtn.setOnClickListener(new View.OnClickListener() {
+        backBtn.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
                 startActivity(i);
+                finish();
             }
         });
+
     }
 
     private void RegisterNow(final String username, String email, String password){

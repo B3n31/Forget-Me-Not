@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -19,15 +20,19 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class CreateOrJoinActivity extends AppCompatActivity {
 
+    FirebaseAuth mAuth;
+    DatabaseReference mRef;
+    FirebaseUser mUser;
+
     private final String AUTH_TOKEN = BuildConfig.AUTH_TOKEN;
     private final String AUTH_URL = BuildConfig.AUTH_URL;
-    private FirebaseAuth mAuth;
 
     private EditText etMeetingId;
 
@@ -45,14 +50,33 @@ public class CreateOrJoinActivity extends AppCompatActivity {
 
         final Button btnCreate = findViewById(R.id.btnCreateMeeting);
         final Button btnJoin = findViewById(R.id.btnJoinMeeting);
-        final Button btnLogOut = findViewById(R.id.btnLogOut);
-
-        mAuth = FirebaseAuth.getInstance();
-
+        final Button friendBut = findViewById(R.id.Friend_Button);
+        final Button btnToLogin = findViewById(R.id.btnToLogin);
+        final Button returnToMain = findViewById(R.id.returnToMainButton);
         etMeetingId = findViewById(R.id.etMeetingId);
 
         btnCreate.setOnClickListener(v -> {
             getToken(null);
+        });
+
+        friendBut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(CreateOrJoinActivity.this, FriendsActivity.class);
+
+                startActivity(i);
+            }
+        });
+
+        btnToLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mAuth = FirebaseAuth.getInstance();
+                mAuth.signOut();
+                Intent i = new Intent(CreateOrJoinActivity.this, LoginActivity.class);
+                startActivity(i);
+                finish();
+            }
         });
 
         btnJoin.setOnClickListener(v -> {
@@ -66,12 +90,6 @@ public class CreateOrJoinActivity extends AppCompatActivity {
             } else {
                 getToken(meetingId);
             }
-        });
-
-        //sign out
-        btnLogOut.setOnClickListener(v -> {
-            mAuth.signOut();
-            startActivity(new Intent(CreateOrJoinActivity.this, LoginActivity.class));
         });
 
     }
