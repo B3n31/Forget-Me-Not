@@ -17,9 +17,11 @@ The Andriod SDK folder should be in this directory. If you do not see this, ther
 
 Please add the line below to your local.properties
 
-auth_token= "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlrZXkiOiJiZDNhNGE0NC00NmY3LTQ1NjMtOTQ4Ni1hNjY5MDZjNzM4YjMiLCJwZXJtaXNzaW9ucyI6WyJhbGxvd19qb2luIl0sImlhdCI6MTY1NzA0ODAzNSwiZXhwIjoxNjU3NjUyODM1fQ.LVDPAhUpLw97ZT5KcGrcEF_jCxzICnIU-lMC7YICyxI"
+auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlrZXkiOiIyN2MyMjYwMC1iY2MwLTQ0ODMtYjZlMS05MTBiM2JjMDkzMDgiLCJwZXJtaXNzaW9ucyI6WyJhbGxvd19qb2luIl0sImlhdCI6MTY1NjM2MzIzNiwiZXhwIjoxNjU2OTY4MDM2fQ.Xlj3YOO3Kp95DHIE1oejB1EmS6ZMbyb0RJoEoWJppD0
 
 The above token is a token we will be using for app in this project. Please do not use this token for your own interest.
+
+If the token above is not working, please contact us and we will provide you guys a new token.
 
 ### Step 4: Run the sample app
 Run the android app with **Shift+F10** or the ** ▶ Run ** from toolbar. 
