@@ -33,5 +33,8 @@ The above token is a token we will be using for app in this project. Please do n
 
 If the token above is not working, please contact us and we will provide you guys a new token.
 
-### Step 4: Run the sample app
+### Step 4: Sync Project with Gradle Files
+Click Sync Project with Gradle Files on the right side of the toolbar.
+
+### Step 5: Run the sample app
 Run the android app with **Shift+F10** or the ** ▶ Run ** from toolbar. 
