@@ -9,16 +9,19 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+//import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText userETLogin, passETLogin;
+//    EditText userETLogin;
+    TextInputLayout passETLogin, userETLogin;
     Button loginBtn, RegisterBtn;
 
     // Firebase
@@ -54,8 +57,8 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String email_text = userETLogin.getText().toString();
-                String pass_text = passETLogin.getText().toString();
+                String email_text = userETLogin.getEditText().getText().toString();
+                String pass_text = passETLogin.getEditText().getText().toString();
 
                 //Checking if it is empty
                 if (TextUtils.isEmpty(email_text) || TextUtils.isEmpty(pass_text)){
