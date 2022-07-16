@@ -18,6 +18,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,14 +27,14 @@ public class CreateOrJoinActivity extends AppCompatActivity {
 
     private final String AUTH_TOKEN = BuildConfig.AUTH_TOKEN;
     private final String AUTH_URL = BuildConfig.AUTH_URL;
-
+    private FirebaseAuth mAuth;
     private EditText etMeetingId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_or_join);
-
+        mAuth = FirebaseAuth.getInstance();
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Forget Me Not");
 
@@ -203,5 +204,12 @@ public class CreateOrJoinActivity extends AppCompatActivity {
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        mAuth.signOut();
+        finish();
     }
 }
