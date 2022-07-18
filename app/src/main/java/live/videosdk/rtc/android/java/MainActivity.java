@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -46,7 +47,9 @@ import org.webrtc.RendererCommon;
 import org.webrtc.SurfaceViewRenderer;
 import org.webrtc.VideoTrack;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -57,6 +60,11 @@ import live.videosdk.rtc.android.Meeting;
 import live.videosdk.rtc.android.Participant;
 import live.videosdk.rtc.android.Stream;
 import live.videosdk.rtc.android.VideoSDK;
+import live.videosdk.rtc.android.java.Lrc_view.ILrcBuilder;
+import live.videosdk.rtc.android.java.Lrc_view.ILrcView;
+import live.videosdk.rtc.android.java.Lrc_view.ILrcViewListener;
+import live.videosdk.rtc.android.java.Lrc_view.impl.DefaultLrcBuilder;
+import live.videosdk.rtc.android.java.Lrc_view.impl.LrcRow;
 import live.videosdk.rtc.android.lib.AppRTCAudioManager;
 import live.videosdk.rtc.android.lib.PeerConnectionUtils;
 import live.videosdk.rtc.android.lib.PubSubMessage;
@@ -101,6 +109,16 @@ public class MainActivity extends AppCompatActivity {
     // creating a variable for our
     // Database Reference for Firebase.
     DatabaseReference databaseReference;
+
+    //for lrc usages
+    public final static String TAG = "MainActivity";
+    ILrcView mLrcView;
+    private int mPlayerTimerDuration = 1000;
+    private Timer mTimer;
+    private TimerTask mTask;
+    private MediaPlayer mPlayer;
+    private String lrc;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,14 +146,7 @@ public class MainActivity extends AppCompatActivity {
         musicBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                try{
-                    //you can change the path, here path is external directory(e.g. sdcard) /Music/maine.mp3
-                    mp.setDataSource("https://firebasestorage.googleapis.com/v0/b/forget-me-not-42f8e.appspot.com/o/Take%20Me%20Out%20To%20the%20Ball%20Game%20(1908).mp3?alt=media&token=80338860-64bb-4146-b894-e709e3b0d3f6");
-
-                    mp.prepare();
-                }catch(Exception e){e.printStackTrace();}
-                mp.start();
+                beginLrcPlay();
             }
         });
         pauseBtn.setOnClickListener(new View.OnClickListener() {
@@ -151,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-    final String token = getIntent().getStringExtra("token");
+        final String token = getIntent().getStringExtra("token");
         final String meetingId = getIntent().getStringExtra("meetingId");
         micEnabled = getIntent().getBooleanExtra("micEnabled", true);
         webcamEnabled = getIntent().getBooleanExtra("webcamEnabled", true);
@@ -235,6 +246,108 @@ public class MainActivity extends AppCompatActivity {
         }, 0, 10000);
     }
 
+    //for lrc usages
+    public String getFromAssets(String fileName){
+        try {
+            InputStreamReader inputReader = new InputStreamReader(getResources().getAssets().open(fileName));
+            BufferedReader bufReader = new BufferedReader(inputReader);
+            String line="";
+            String result="";
+            while((line = bufReader.readLine()) != null){
+                if(line.trim().equals(""))
+                    continue;
+                result += line + "\r\n";
+            }
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+    //for lrc usages
+    public void beginLrcPlay(){
+
+        mPlayer = new MediaPlayer();
+        try {
+            mPlayer.setDataSource("https://firebasestorage.googleapis.com/v0/b/forget-me-not-42f8e.appspot.com/o/Take%20Me%20Out%20To%20the%20Ball%20Game%20(1908).mp3?alt=media&token=80338860-64bb-4146-b894-e709e3b0d3f6");
+            //准备播放歌曲监听
+            mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                //准备完毕
+                public void onPrepared(MediaPlayer mp) {
+                    mp.start();
+                    if(mTimer == null){
+                        mTimer = new Timer();
+                        mTask = new LrcTask();
+                        mTimer.scheduleAtFixedRate(mTask, 0, mPlayerTimerDuration);
+                    }
+                }
+            });
+            //歌曲播放完毕监听
+            mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                public void onCompletion(MediaPlayer mp) {
+                    stopLrcPlay();
+                }
+            });
+            //准备播放歌曲
+            mPlayer.prepare();
+            //开始播放歌曲
+            mPlayer.start();
+
+            //for lrc usages
+            mLrcView=(ILrcView)findViewById(R.id.lrcView);
+
+            //从assets目录下读取歌词文件内容
+            lrc = getFromAssets("song_1.lrc");
+            //解析歌词构造器
+            ILrcBuilder builder = new DefaultLrcBuilder();
+            //解析歌词返回LrcRow集合
+            List<LrcRow> rows = builder.getLrcRows(lrc);
+            //将得到的歌词集合传给mLrcView用来展示
+            mLrcView.setLrc(rows);
+
+
+            //设置自定义的LrcView上下拖动歌词时监听
+            mLrcView.setListener(new ILrcViewListener() {
+                //当歌词被用户上下拖动的时候回调该方法,从高亮的那一句歌词开始播放
+                public void onLrcSought(int newPosition, LrcRow row) {
+                    if (mPlayer != null) {
+                        Log.d(TAG, "onLrcSought:" + row.startTime);
+                        mPlayer.seekTo((int) row.startTime);
+                    }
+                }
+            });
+
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    //for lrc usages
+    public void stopLrcPlay(){
+        if(mTimer != null){
+            mTimer.cancel();
+            mTimer = null;
+        }
+    }
+    //for lrc usages
+    class LrcTask extends TimerTask{
+        @Override
+        public void run() {
+            //获取歌曲播放的位置
+            final long timePassed = mPlayer.getCurrentPosition();
+            MainActivity.this.runOnUiThread(new Runnable() {
+                public void run() {
+                    //滚动歌词
+                    mLrcView.seekLrcToTime(timePassed);
+                }
+            });
+        }
+    };
+
+
     private boolean isNetworkAvailable() {
         ConnectivityManager manager =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -306,7 +419,7 @@ public class MainActivity extends AppCompatActivity {
                     if (!pubSubMessage.getSenderId().equals(meeting.getLocalParticipant().getId())) {
                         View parentLayout = findViewById(android.R.id.content);
                         Snackbar.make(parentLayout, pubSubMessage.getSenderName() + " says: " +
-                                pubSubMessage.getMessage(), Snackbar.LENGTH_SHORT)
+                                        pubSubMessage.getMessage(), Snackbar.LENGTH_SHORT)
                                 .setDuration(2000).show();
                     }
                 }

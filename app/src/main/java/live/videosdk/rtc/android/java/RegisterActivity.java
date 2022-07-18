@@ -26,11 +26,13 @@ public class RegisterActivity extends AppCompatActivity {
 
     //widgets
     EditText userET, passET, emailET;
-    Button registerBtn, backBtn;
+    Button registerBtn;
 
     //Firebase
     FirebaseAuth auth;
     DatabaseReference myRef;
+
+
 
 
     @Override
@@ -43,11 +45,9 @@ public class RegisterActivity extends AppCompatActivity {
         passET = findViewById(R.id.passwordEditText);
         emailET = findViewById(R.id.emailEditText);
         registerBtn = findViewById(R.id.buttonRegister);
-        backBtn = findViewById(R.id.buttonBack);
 
         // Firebase Auth
         auth = FirebaseAuth.getInstance();
-
 
         // Adding Event Listener to Button Register
         registerBtn.setOnClickListener(new View.OnClickListener(){
@@ -63,16 +63,6 @@ public class RegisterActivity extends AppCompatActivity {
                 }else{
                     RegisterNow(username_text, email_text, pass_text);
                 }
-            }
-        });
-
-        backBtn.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
-                startActivity(i);
-                finish();
             }
         });
 

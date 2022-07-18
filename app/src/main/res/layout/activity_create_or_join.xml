@@ -71,13 +71,6 @@
             android:layout_height="wrap_content"
             android:text="@string/join_meeting" />
 
-        <Button
-            android:id="@+id/btnToLogin"
-            android:layout_width="164dp"
-            android:layout_height="wrap_content"
-            android:text="logout"
-            android:textColor="#FFFFFF" />
-
     </LinearLayout>
 
 

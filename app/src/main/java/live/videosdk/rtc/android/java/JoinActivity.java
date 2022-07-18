@@ -40,8 +40,6 @@ public class JoinActivity extends AppCompatActivity {
     private SurfaceViewRenderer svrJoin;
     private EditText etName;
 
-
-
     VideoTrack videoTrack;
     VideoCapturer videoCapturer;
     PeerConnectionFactory.InitializationOptions initializationOptions;

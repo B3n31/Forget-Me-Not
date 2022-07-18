@@ -13,6 +13,8 @@
         <entry key="app/src/main/res/layout/activity_register.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/layout/activity_search_friend.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.28229166666666666" />
+        <entry key="app/src/main/res/layout/activity_view_friend.xml" value="0.28125" />
+        <entry key="app/src/main/res/layout/friends_layout.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/layout/item_message_list.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/menu/menu_logout.xml" value="0.28229166666666666" />
       </map>

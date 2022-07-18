@@ -5,11 +5,14 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -20,16 +23,22 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import live.videosdk.rtc.android.java.Model.Users;
+
 public class CreateOrJoinActivity extends AppCompatActivity {
 
-    FirebaseAuth mAuth;
-    DatabaseReference mRef;
-    FirebaseUser mUser;
+    // Firebase
+    FirebaseUser firebaseUser;
+    DatabaseReference myRef;
 
     private final String AUTH_TOKEN = BuildConfig.AUTH_TOKEN;
     private final String AUTH_URL = BuildConfig.AUTH_URL;
@@ -51,31 +60,18 @@ public class CreateOrJoinActivity extends AppCompatActivity {
         final Button btnCreate = findViewById(R.id.btnCreateMeeting);
         final Button btnJoin = findViewById(R.id.btnJoinMeeting);
         final Button friendBut = findViewById(R.id.Friend_Button);
-        final Button btnToLogin = findViewById(R.id.btnToLogin);
         final Button returnToMain = findViewById(R.id.returnToMainButton);
         etMeetingId = findViewById(R.id.etMeetingId);
 
         btnCreate.setOnClickListener(v -> {
             getToken(null);
         });
-
         friendBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(CreateOrJoinActivity.this, FriendsActivity.class);
 
                 startActivity(i);
-            }
-        });
-
-        btnToLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mAuth = FirebaseAuth.getInstance();
-                mAuth.signOut();
-                Intent i = new Intent(CreateOrJoinActivity.this, LoginActivity.class);
-                startActivity(i);
-                finish();
             }
         });
 
@@ -89,6 +85,20 @@ public class CreateOrJoinActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
             } else {
                 getToken(meetingId);
+            }
+        });
+
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();;
+        myRef = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot datasnapshot) {
+                Users users = datasnapshot.getValue(Users.class);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
 
@@ -224,4 +234,26 @@ public class CreateOrJoinActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    // Adding Logout Functionality
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_logout, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+
+            case R.id.logout:
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(CreateOrJoinActivity.this, LoginActivity.class));
+                finish();
+                return true;
+        }
+        return false;
+    }
+
 }
