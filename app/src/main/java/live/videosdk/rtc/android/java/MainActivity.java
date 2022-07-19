@@ -142,7 +142,6 @@ public class MainActivity extends AppCompatActivity {
         btnMic = findViewById(R.id.btnMic);
         btnWebcam = findViewById(R.id.btnWebcam);
 
-        final MediaPlayer mp=new MediaPlayer();
         musicBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -152,13 +151,13 @@ public class MainActivity extends AppCompatActivity {
         pauseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mp.pause();
+                mPlayer.pause();
             }
         });
         stopBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mp.stop();
+                mPlayer.stop();
             }
         });
 
@@ -269,10 +268,10 @@ public class MainActivity extends AppCompatActivity {
 
         mPlayer = new MediaPlayer();
         try {
-            mPlayer.setDataSource("https://firebasestorage.googleapis.com/v0/b/forget-me-not-42f8e.appspot.com/o/Take%20Me%20Out%20To%20the%20Ball%20Game%20(1908).mp3?alt=media&token=80338860-64bb-4146-b894-e709e3b0d3f6");
-            //准备播放歌曲监听
+            mPlayer.setDataSource("https://firebasestorage.googleapis.com/v0/b/forget-me-not-42f8e.appspot.com/o/Fool%2527s%20Garden%20-%20Lemon%20Tree.mp3?alt=media&token=4dc8490c-1cd1-449b-aec4-48349f6857cd");
+            //Start PreparedListener
             mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                //准备完毕
+                //Finishing prepare
                 public void onPrepared(MediaPlayer mp) {
                     mp.start();
                     if(mTimer == null){
@@ -282,33 +281,32 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             });
-            //歌曲播放完毕监听
+            //Start CompletionListener
             mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 public void onCompletion(MediaPlayer mp) {
                     stopLrcPlay();
                 }
             });
-            //准备播放歌曲
+            //Prepare to play the song
             mPlayer.prepare();
-            //开始播放歌曲
+            //Start playing the song
             mPlayer.start();
 
             //for lrc usages
             mLrcView=(ILrcView)findViewById(R.id.lrcView);
 
-            //从assets目录下读取歌词文件内容
-            lrc = getFromAssets("song_1.lrc");
-            //解析歌词构造器
+            //Read lyrics from Assets file
+            lrc = getFromAssets("Fool's Garden - Lemon Tree.lrc");
+            //Parsing lyrics
             ILrcBuilder builder = new DefaultLrcBuilder();
-            //解析歌词返回LrcRow集合
+            //Return lyrics to LrcRow
             List<LrcRow> rows = builder.getLrcRows(lrc);
-            //将得到的歌词集合传给mLrcView用来展示
+            //Display the lyrics
             mLrcView.setLrc(rows);
 
-
-            //设置自定义的LrcView上下拖动歌词时监听
+            //Set listener when drag the lyrics
             mLrcView.setListener(new ILrcViewListener() {
-                //当歌词被用户上下拖动的时候回调该方法,从高亮的那一句歌词开始播放
+                //Highlight the sentence which is playing
                 public void onLrcSought(int newPosition, LrcRow row) {
                     if (mPlayer != null) {
                         Log.d(TAG, "onLrcSought:" + row.startTime);
@@ -336,7 +334,7 @@ public class MainActivity extends AppCompatActivity {
     class LrcTask extends TimerTask{
         @Override
         public void run() {
-            //获取歌曲播放的位置
+            //get position of the playing sentence
             final long timePassed = mPlayer.getCurrentPosition();
             MainActivity.this.runOnUiThread(new Runnable() {
                 public void run() {
