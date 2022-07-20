@@ -43,6 +43,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.nabinbhandari.android.permissions.PermissionHandler;
@@ -174,26 +175,20 @@ public class MainActivity extends AppCompatActivity {
                     FirebaseDatabase.getInstance().getReference().child("MyUsers").child(uids.get(i)).child("play_this_link").push().setValue(dataMap);
 
                     }
-
-                FirebaseDatabase.getInstance().getReference().child("MyUsers").child(mAuth.getCurrentUser().getUid()).child("play_this_link").addChildEventListener(new ChildEventListener() {
+                for(int i = 0 ; i < uids.size() ; i++ ){
+                FirebaseDatabase.getInstance().getReference().child("MyUsers").child(uids.get(i)).child("play_this_link").addValueEventListener(new ValueEventListener() {
                     @Override
-                    public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                        linkOfTheSong = (String) snapshot.child("music").getValue();
-                    }
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        linkOfTheSong = "https://firebasestorage.googleapis.com/v0/b/forget-me-not-42f8e.appspot.com/o/Take%20Me%20Out%20To%20the%20Ball%20Game%20(1908).mp3?alt=media&token=80338860-64bb-4146-b894-e709e3b0d3f6";
+                        Toast.makeText(MainActivity.this, "Hello",Toast.LENGTH_SHORT).show();
+                        try{
+                            //you can change the path, here path is external directory(e.g. sdcard) /Music/maine.mp3
 
-                    @Override
-                    public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                            mp.setDataSource(linkOfTheSong);
 
-                    }
-
-                    @Override
-                    public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-                    }
-
-                    @Override
-                    public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
+                            mp.prepare();
+                        }catch(Exception e){e.printStackTrace();}
+                        mp.start();
                     }
 
                     @Override
@@ -201,6 +196,7 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 });
+                }
                 try{
                     //you can change the path, here path is external directory(e.g. sdcard) /Music/maine.mp3
 

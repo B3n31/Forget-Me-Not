@@ -118,7 +118,6 @@ public class ParticipantAdapter extends RecyclerView.Adapter<ParticipantAdapter.
                 if (stream.getKind().equalsIgnoreCase("video")) {
                     VideoTrack track = (VideoTrack) stream.getTrack();
                     if (track != null) track.removeSink(holder.svrParticipant);
-
                     holder.svrParticipant.clearImage();
                     holder.svrParticipant.setVisibility(View.GONE);
                 } else if (stream.getKind().equalsIgnoreCase("audio")) {
