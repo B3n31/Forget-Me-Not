@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -36,8 +37,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.nabinbhandari.android.permissions.PermissionHandler;
@@ -51,6 +58,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.Timer;
@@ -83,6 +91,9 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton btnAudioSelection;
     private Button musicBtn, pauseBtn, stopBtn;
 
+    private FirebaseAuth mAuth;
+    private FirebaseUser fuser;
+
     private boolean micEnabled = true;
     private boolean webcamEnabled = true;
     private boolean recording = false;
@@ -90,6 +101,8 @@ public class MainActivity extends AppCompatActivity {
     private boolean localScreenShare = false;
     private boolean isNetworkAvailable = true;
 
+    private List<String> uids;
+    private String linkOfTheSong;
 
     private static final String YOUTUBE_RTMP_URL = null;
     private static final String YOUTUBE_RTMP_STREAM_KEY = null;
@@ -128,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
         btnMore = findViewById(R.id.btnMore);
         btnSwitchCameraMode = findViewById(R.id.btnSwitchCameraMode);
         btnScreenShare = findViewById(R.id.btnScreenShare);
-
+        uids = new ArrayList<>();
         musicBtn = findViewById(R.id.musicBtn);
         pauseBtn = findViewById(R.id.pauseBtn);
         stopBtn = findViewById(R.id.stopBtn);
@@ -142,6 +155,33 @@ public class MainActivity extends AppCompatActivity {
         btnMic = findViewById(R.id.btnMic);
         btnWebcam = findViewById(R.id.btnWebcam);
 
+
+        FirebaseDatabase.getInstance().getReference().child("MyUsers").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                uids.add(snapshot.getKey());
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+    });
         musicBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -160,7 +200,6 @@ public class MainActivity extends AppCompatActivity {
                 mPlayer.stop();
             }
         });
-
         final String token = getIntent().getStringExtra("token");
         final String meetingId = getIntent().getStringExtra("meetingId");
         micEnabled = getIntent().getBooleanExtra("micEnabled", true);
@@ -267,7 +306,37 @@ public class MainActivity extends AppCompatActivity {
     public void beginLrcPlay(){
 
         mPlayer = new MediaPlayer();
-        try {
+        fuser = FirebaseAuth.getInstance().getCurrentUser();
+        HashMap<String, String> dataMap = new HashMap<>();
+        dataMap.put("music",
+                "https://firebasestorage.googleapis.com/v0/b/forget-me-not-42f8e.appspot.com/o/Take%20Me%20Out%20To%20the%20Ball%20Game%20(1908).mp3?alt=media&token=80338860-64bb-4146-b894-e709e3b0d3f6");
+        for(int i = 0 ; i < uids.size() ; i++ ) {
+            FirebaseDatabase.getInstance().getReference().child("MyUsers").child(uids.get(i)).child("play_this_link").push().setValue(dataMap);
+        }
+        for(int i = 0 ; i < uids.size() ; i++ ){
+            FirebaseDatabase.getInstance().getReference().child("MyUsers").child(uids.get(i)).child("play_this_link").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    linkOfTheSong = "https://firebasestorage.googleapis.com/v0/b/forget-me-not-42f8e.appspot.com/o/Take%20Me%20Out%20To%20the%20Ball%20Game%20(1908).mp3?alt=media&token=80338860-64bb-4146-b894-e709e3b0d3f6";
+                    Toast.makeText(MainActivity.this, "Hello",Toast.LENGTH_SHORT).show();
+                    try{
+                        //you can change the path, here path is external directory(e.g. sdcard) /Music/maine.mp3
+
+                        mPlayer.setDataSource(linkOfTheSong);
+
+                        mPlayer.prepare();
+                    }catch(Exception e){e.printStackTrace();}
+                    mPlayer.start();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
+
+            try {
             mPlayer.setDataSource("https://firebasestorage.googleapis.com/v0/b/forget-me-not-42f8e.appspot.com/o/Fool%2527s%20Garden%20-%20Lemon%20Tree.mp3?alt=media&token=4dc8490c-1cd1-449b-aec4-48349f6857cd");
             //Start PreparedListener
             mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -338,7 +407,7 @@ public class MainActivity extends AppCompatActivity {
             final long timePassed = mPlayer.getCurrentPosition();
             MainActivity.this.runOnUiThread(new Runnable() {
                 public void run() {
-                    //滚动歌词
+                    //Rolling the lyrics
                     mLrcView.seekLrcToTime(timePassed);
                 }
             });
