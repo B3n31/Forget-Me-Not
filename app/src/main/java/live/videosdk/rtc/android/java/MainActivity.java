@@ -308,8 +308,7 @@ public class MainActivity extends AppCompatActivity {
         mPlayer = new MediaPlayer();
         fuser = FirebaseAuth.getInstance().getCurrentUser();
         HashMap<String, String> dataMap = new HashMap<>();
-        dataMap.put("music",
-                "https://firebasestorage.googleapis.com/v0/b/forget-me-not-42f8e.appspot.com/o/Take%20Me%20Out%20To%20the%20Ball%20Game%20(1908).mp3?alt=media&token=80338860-64bb-4146-b894-e709e3b0d3f6");
+        dataMap.put("music","https://firebasestorage.googleapis.com/v0/b/forget-me-not-42f8e.appspot.com/o/Fool%2527s%20Garden%20-%20Lemon%20Tree.mp3?alt=media&token=4dc8490c-1cd1-449b-aec4-48349f6857cd");
         for(int i = 0 ; i < uids.size() ; i++ ) {
             FirebaseDatabase.getInstance().getReference().child("MyUsers").child(uids.get(i)).child("play_this_link").push().setValue(dataMap);
         }
@@ -317,7 +316,7 @@ public class MainActivity extends AppCompatActivity {
             FirebaseDatabase.getInstance().getReference().child("MyUsers").child(uids.get(i)).child("play_this_link").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    linkOfTheSong = "https://firebasestorage.googleapis.com/v0/b/forget-me-not-42f8e.appspot.com/o/Take%20Me%20Out%20To%20the%20Ball%20Game%20(1908).mp3?alt=media&token=80338860-64bb-4146-b894-e709e3b0d3f6";
+                    linkOfTheSong = "https://firebasestorage.googleapis.com/v0/b/forget-me-not-42f8e.appspot.com/o/Fool%2527s%20Garden%20-%20Lemon%20Tree.mp3?alt=media&token=4dc8490c-1cd1-449b-aec4-48349f6857cd";
                     Toast.makeText(MainActivity.this, "Hello",Toast.LENGTH_SHORT).show();
                     try{
                         //you can change the path, here path is external directory(e.g. sdcard) /Music/maine.mp3
