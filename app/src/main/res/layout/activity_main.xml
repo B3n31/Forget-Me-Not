@@ -65,6 +65,11 @@
         android:layout_height="100dp"
         android:layout_weight="1" />
 
+    <live.videosdk.rtc.android.java.Lrc_view.impl.LrcView
+        android:id="@+id/lrcView"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"/>
+
     <TextView
         android:id="@+id/textView2"
         android:layout_width="match_parent"
