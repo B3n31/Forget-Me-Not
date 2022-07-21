@@ -3,26 +3,21 @@ package live.videosdk.rtc.android.java.Lrc_view.impl;
 import android.util.Log;
 
 /**
- * 歌词行
- * 包括该行歌词的时间，歌词内容
+ * the lyrics
+ * Include the time and content of the lyrics
  */
 public class LrcRow implements Comparable<LrcRow>{
     public final static String TAG = "LrcRow";
 
-    /** 该行歌词要开始播放的时间，格式如下：[02:34.14] */
     public String startTimeString;
 
-    /** 该行歌词要开始播放的时间，由[02:34.14]格式转换为long型，
-     * 即将2分34秒14毫秒都转为毫秒后 得到的long型值：startTime=02*60*1000+34*1000+14
+    /**
+     * change the time of the lyrics to long
      */
     public long startTime;
-
-    /** 该行歌词要结束播放的时间，由[02:34.14]格式转换为long型，
-     * 即将2分34秒14毫秒都转为毫秒后 得到的long型值：startTime=02*60*1000+34*1000+14
-     */
     public long endTime;
 
-    /** 该行歌词的内容 */
+    /** The content of this line of lyrics */
     public String content;
 
     
@@ -71,7 +66,7 @@ public class LrcRow implements Comparable<LrcRow>{
     }
 
     /**
-     * 排序的时候，根据歌词的时间来排序
+     * When sorting, sort by the date of the lyrics
      */
     public int compareTo(LrcRow another) {
         return (int)(this.startTime - another.startTime);
