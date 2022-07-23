@@ -9,13 +9,24 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
 
@@ -28,6 +39,7 @@ import org.webrtc.VideoSource;
 import org.webrtc.VideoTrack;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import live.videosdk.rtc.android.lib.PeerConnectionUtils;
 
@@ -36,10 +48,12 @@ public class JoinActivity extends AppCompatActivity {
     private boolean micEnabled = false;
     private boolean webcamEnabled = false;
 
+    private String userName;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser mUser;
+    private DatabaseReference mUserRef;
     private FloatingActionButton btnMic, btnWebcam;
     private SurfaceViewRenderer svrJoin;
-    private EditText etName;
-
     VideoTrack videoTrack;
     VideoCapturer videoCapturer;
     PeerConnectionFactory.InitializationOptions initializationOptions;
@@ -89,7 +103,9 @@ public class JoinActivity extends AppCompatActivity {
         btnMic = findViewById(R.id.btnMic);
         btnWebcam = findViewById(R.id.btnWebcam);
         svrJoin = findViewById(R.id.svrJoiningView);
-        etName = findViewById(R.id.etName);
+        firebaseAuth = FirebaseAuth.getInstance();
+        mUser = firebaseAuth.getCurrentUser();
+        mUserRef = FirebaseDatabase.getInstance().getReference().child("MyUsers");
 
         checkPermissions();
 
@@ -117,20 +133,36 @@ public class JoinActivity extends AppCompatActivity {
         final String meetingId = getIntent().getStringExtra("meetingId");
 
         btnJoin.setOnClickListener(v -> {
-            if ("".equals(etName.getText().toString())) {
-                Toast.makeText(JoinActivity.this, "Please Enter Name", Toast.LENGTH_SHORT).show();
-            } else {
                 Intent intent = new Intent(JoinActivity.this, MainActivity.class);
                 intent.putExtra("token", token);
                 intent.putExtra("meetingId", meetingId);
                 intent.putExtra("micEnabled", micEnabled);
                 intent.putExtra("webcamEnabled", webcamEnabled);
-                intent.putExtra("paticipantName", etName.getText().toString().trim());
+                intent.putExtra("paticipantName", userName);
+                intent.putExtra("Role", "Host");
                 startActivity(intent);
                 finish();
-            }
         });
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mUserRef.child(mUser.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                userName = snapshot.child("username").getValue().toString();
+                String tempHolder = userName + ", are you ready to party?";
+                TextView textViewJoinTheParty = (TextView) findViewById(R.id.AskingText);
+                textViewJoinTheParty.setText(tempHolder);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void checkPermissions() {

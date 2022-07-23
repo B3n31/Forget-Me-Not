@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -26,6 +27,7 @@ public class LoginActivity extends AppCompatActivity {
 
     // Firebase
     FirebaseAuth auth;
+    FirebaseUser firebaseUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,14 @@ public class LoginActivity extends AppCompatActivity {
 
         // Firebase Auth
         auth = FirebaseAuth.getInstance();
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        //Saving the current User
+        if (firebaseUser != null) {
+            Intent i = new Intent(LoginActivity.this, CreateOrJoinActivity.class);
+            startActivity(i);
+            finish();
+        }
 
         // Register Button
         RegisterBtn.setOnClickListener(new View.OnClickListener() {

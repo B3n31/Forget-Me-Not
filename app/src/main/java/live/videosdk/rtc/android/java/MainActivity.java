@@ -16,7 +16,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
@@ -44,8 +43,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
 
@@ -53,7 +50,9 @@ import org.webrtc.RendererCommon;
 import org.webrtc.SurfaceViewRenderer;
 import org.webrtc.VideoTrack;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -65,6 +64,11 @@ import live.videosdk.rtc.android.Meeting;
 import live.videosdk.rtc.android.Participant;
 import live.videosdk.rtc.android.Stream;
 import live.videosdk.rtc.android.VideoSDK;
+import live.videosdk.rtc.android.java.Lrc_view.ILrcBuilder;
+import live.videosdk.rtc.android.java.Lrc_view.ILrcView;
+import live.videosdk.rtc.android.java.Lrc_view.ILrcViewListener;
+import live.videosdk.rtc.android.java.Lrc_view.impl.DefaultLrcBuilder;
+import live.videosdk.rtc.android.java.Lrc_view.impl.LrcRow;
 import live.videosdk.rtc.android.lib.AppRTCAudioManager;
 import live.videosdk.rtc.android.lib.PeerConnectionUtils;
 import live.videosdk.rtc.android.lib.PubSubMessage;
@@ -83,8 +87,8 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton btnAudioSelection;
     private Button musicBtn, pauseBtn, stopBtn;
 
-    private FirebaseAuth mAuth;
-    private FirebaseUser fuser;
+    private FirebaseAuth auth;
+    private DatabaseReference myRef;
 
     private boolean micEnabled = true;
     private boolean webcamEnabled = true;
@@ -92,8 +96,10 @@ public class MainActivity extends AppCompatActivity {
     private boolean livestreaming = false;
     private boolean localScreenShare = false;
     private boolean isNetworkAvailable = true;
-    private List<String> uids;
+
+    private List<String> uIds;
     private String linkOfTheSong;
+
     private static final String YOUTUBE_RTMP_URL = null;
     private static final String YOUTUBE_RTMP_STREAM_KEY = null;
 
@@ -112,17 +118,26 @@ public class MainActivity extends AppCompatActivity {
     // creating a variable for our
     // Database Reference for Firebase.
     DatabaseReference databaseReference;
+
+    //for lrc usages
+    public final static String TAG = "MainActivity";
+    ILrcView mLrcView;
+    private int mPlayerTimerDuration = 1000;
+    private Timer mTimer;
+    private TimerTask mTask;
+    private MediaPlayer mPlayer;
+    private String lrc;
+    private String meetingId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mAuth = FirebaseAuth.getInstance();
         btnLeave = findViewById(R.id.btnLeave);
         btnChat = findViewById(R.id.btnChat);
         btnMore = findViewById(R.id.btnMore);
         btnSwitchCameraMode = findViewById(R.id.btnSwitchCameraMode);
         btnScreenShare = findViewById(R.id.btnScreenShare);
-        uids = new ArrayList<>();
+        uIds = new ArrayList<>();
         musicBtn = findViewById(R.id.musicBtn);
         pauseBtn = findViewById(R.id.pauseBtn);
         stopBtn = findViewById(R.id.stopBtn);
@@ -136,11 +151,17 @@ public class MainActivity extends AppCompatActivity {
         btnMic = findViewById(R.id.btnMic);
         btnWebcam = findViewById(R.id.btnWebcam);
 
-        final MediaPlayer mp=new MediaPlayer();
+        auth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = auth.getCurrentUser();
+       meetingId = getIntent().getStringExtra("meetingId");
+        String userid = firebaseUser.getUid();
+        FirebaseDatabase.getInstance().getReference("Rooms").child(meetingId).child(auth.getCurrentUser().
+                getUid()).child("Role").setValue(getIntent().getStringExtra("Role"));
+
         FirebaseDatabase.getInstance().getReference().child("MyUsers").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                uids.add(snapshot.getKey());
+                uIds.add(snapshot.getKey());
             }
 
             @Override
@@ -162,66 +183,27 @@ public class MainActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
-        });
+    });
         musicBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                     fuser = FirebaseAuth.getInstance().getCurrentUser();
-                    HashMap<String, String> dataMap = new HashMap<>();
-                    dataMap.put("music",
-                            "https://firebasestorage.googleapis.com/v0/b/forget-me-not-42f8e.appspot.com/o/Take%20Me%20Out%20To%20the%20Ball%20Game%20(1908).mp3?alt=media&token=80338860-64bb-4146-b894-e709e3b0d3f6");
-                    for(int i = 0 ; i < uids.size() ; i++ ){
-                    FirebaseDatabase.getInstance().getReference().child("MyUsers").child(uids.get(i)).child("play_this_link").push().setValue(dataMap);
-
-                    }
-                for(int i = 0 ; i < uids.size() ; i++ ){
-                FirebaseDatabase.getInstance().getReference().child("MyUsers").child(uids.get(i)).child("play_this_link").addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        linkOfTheSong = "https://firebasestorage.googleapis.com/v0/b/forget-me-not-42f8e.appspot.com/o/Take%20Me%20Out%20To%20the%20Ball%20Game%20(1908).mp3?alt=media&token=80338860-64bb-4146-b894-e709e3b0d3f6";
-                        Toast.makeText(MainActivity.this, "Hello",Toast.LENGTH_SHORT).show();
-                        try{
-                            //you can change the path, here path is external directory(e.g. sdcard) /Music/maine.mp3
-
-                            mp.setDataSource(linkOfTheSong);
-
-                            mp.prepare();
-                        }catch(Exception e){e.printStackTrace();}
-                        mp.start();
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-                }
-                try{
-                    //you can change the path, here path is external directory(e.g. sdcard) /Music/maine.mp3
-
-                    mp.setDataSource(linkOfTheSong);
-
-                    mp.prepare();
-                }catch(Exception e){e.printStackTrace();}
-                mp.start();
+                beginLrcPlay();
             }
         });
         pauseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mp.pause();
+                mPlayer.pause();
             }
         });
         stopBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mp.stop();
+                mPlayer.stop();
             }
         });
+        final String token = getIntent().getStringExtra("token");
 
-    final String token = getIntent().getStringExtra("token");
-        final String meetingId = getIntent().getStringExtra("meetingId");
         micEnabled = getIntent().getBooleanExtra("micEnabled", true);
         webcamEnabled = getIntent().getBooleanExtra("webcamEnabled", true);
         String participantName = getIntent().getStringExtra("paticipantName");
@@ -253,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
 
         //
         final RecyclerView rvParticipants = findViewById(R.id.rvParticipants);
-        rvParticipants.setLayoutManager(new GridLayoutManager(this, 2));
+        rvParticipants.setLayoutManager(new GridLayoutManager(this, 3));
         rvParticipants.setAdapter(new ParticipantAdapter(meeting));
 
         // Local participant listeners
@@ -303,6 +285,138 @@ public class MainActivity extends AppCompatActivity {
             }
         }, 0, 10000);
     }
+
+    //for lrc usages
+    public String getFromAssets(String fileName){
+        try {
+            InputStreamReader inputReader = new InputStreamReader(getResources().getAssets().open(fileName));
+            BufferedReader bufReader = new BufferedReader(inputReader);
+            String line="";
+            String result="";
+            while((line = bufReader.readLine()) != null){
+                if(line.trim().equals(""))
+                    continue;
+                result += line + "\r\n";
+            }
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+    //for lrc usages
+    public void beginLrcPlay(){
+
+        mPlayer = new MediaPlayer();
+
+        HashMap<String, String> dataMap = new HashMap<>();
+        dataMap.put("music","https://firebasestorage.googleapis.com/v0/b/forget-me-not-42f8e.appspot.com/o/Fool%2527s%20Garden%20-%20Lemon%20Tree.mp3?alt=media&token=4dc8490c-1cd1-449b-aec4-48349f6857cd");
+        for(int i = 0 ; i < uIds.size() ; i++ ) {
+            FirebaseDatabase.getInstance().getReference().child("MyUsers").child(uIds.get(i)).child("play_this_link").push().setValue(dataMap);
+        }
+        for(int i = 0 ; i < uIds.size() ; i++ ){
+            FirebaseDatabase.getInstance().getReference().child("MyUsers").child(uIds.get(i)).child("play_this_link").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    linkOfTheSong = "https://firebasestorage.googleapis.com/v0/b/forget-me-not-42f8e.appspot.com/o/Fool%2527s%20Garden%20-%20Lemon%20Tree.mp3?alt=media&token=4dc8490c-1cd1-449b-aec4-48349f6857cd";
+                    try{
+                        //you can change the path, here path is external directory(e.g. sdcard) /Music/maine.mp3
+                        lyrics();
+                        mPlayer.setDataSource(linkOfTheSong);
+
+                        mPlayer.prepare();
+                    }catch(Exception e){e.printStackTrace();}
+                    mPlayer.start();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
+        lyrics();
+    }
+    public void lyrics(){
+        try {
+            mPlayer.setDataSource("https://firebasestorage.googleapis.com/v0/b/forget-me-not-42f8e.appspot.com/o/Fool%2527s%20Garden%20-%20Lemon%20Tree.mp3?alt=media&token=4dc8490c-1cd1-449b-aec4-48349f6857cd");
+            //Start PreparedListener
+            mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                //Finishing prepare
+                public void onPrepared(MediaPlayer mp) {
+                    mp.start();
+                    if(mTimer == null){
+                        mTimer = new Timer();
+                        mTask = new LrcTask();
+                        mTimer.scheduleAtFixedRate(mTask, 0, mPlayerTimerDuration);
+                    }
+                }
+            });
+            //Start CompletionListener
+            mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                public void onCompletion(MediaPlayer mp) {
+                    stopLrcPlay();
+                }
+            });
+            //Prepare to play the song
+            mPlayer.prepare();
+            //Start playing the song
+            mPlayer.start();
+
+            //for lrc usages
+            mLrcView=(ILrcView)findViewById(R.id.lrcView);
+
+            //Read lyrics from Assets file
+            lrc = getFromAssets("Fool's Garden - Lemon Tree.lrc");
+            //Parsing lyrics
+            ILrcBuilder builder = new DefaultLrcBuilder();
+            //Return lyrics to LrcRow
+            List<LrcRow> rows = builder.getLrcRows(lrc);
+            //Display the lyrics
+            mLrcView.setLrc(rows);
+
+            //Set listener when drag the lyrics
+            mLrcView.setListener(new ILrcViewListener() {
+                //Highlight the sentence which is playing
+                public void onLrcSought(int newPosition, LrcRow row) {
+                    if (mPlayer != null) {
+                        Log.d(TAG, "onLrcSought:" + row.startTime);
+                        mPlayer.seekTo((int) row.startTime);
+                    }
+                }
+            });
+
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //for lrc usages
+    public void stopLrcPlay(){
+        if(mTimer != null){
+            mTimer.cancel();
+            mTimer = null;
+        }
+    }
+    //for lrc usages
+    class LrcTask extends TimerTask{
+        @Override
+        public void run() {
+            //get position of the playing sentence
+            final long timePassed = mPlayer.getCurrentPosition();
+            MainActivity.this.runOnUiThread(new Runnable() {
+                public void run() {
+                    //Rolling the lyrics
+                    mLrcView.seekLrcToTime(timePassed);
+                }
+            });
+        }
+    };
+
 
     private boolean isNetworkAvailable() {
         ConnectivityManager manager =
@@ -375,7 +489,7 @@ public class MainActivity extends AppCompatActivity {
                     if (!pubSubMessage.getSenderId().equals(meeting.getLocalParticipant().getId())) {
                         View parentLayout = findViewById(android.R.id.content);
                         Snackbar.make(parentLayout, pubSubMessage.getSenderName() + " says: " +
-                                pubSubMessage.getMessage(), Snackbar.LENGTH_SHORT)
+                                        pubSubMessage.getMessage(), Snackbar.LENGTH_SHORT)
                                 .setDuration(2000).show();
                     }
                 }
@@ -825,9 +939,12 @@ public class MainActivity extends AppCompatActivity {
         if (svrShare != null) svrShare.release();
 
         ((RecyclerView) findViewById(R.id.rvParticipants)).setAdapter(null);
+        FirebaseDatabase.getInstance().getReference("Rooms").child(meetingId).removeValue();
 
         timer.cancel();
-
+        if(mPlayer.isPlaying()) {
+            mPlayer.stop();
+        }
         super.onDestroy();
     }
 }

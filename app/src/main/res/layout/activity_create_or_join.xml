@@ -28,7 +28,7 @@
             android:id="@+id/Friend_Button"
             android:layout_width="164dp"
             android:layout_height="wrap_content"
-            android:text="@string/friends"
+            android:text="join a party"
             android:textColor="#FFFFFF" />
 
         <Button
