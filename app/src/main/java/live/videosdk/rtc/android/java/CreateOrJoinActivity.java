@@ -60,7 +60,7 @@ public class CreateOrJoinActivity extends AppCompatActivity {
         final Button btnCreate = findViewById(R.id.btnCreateMeeting);
         final Button btnJoin = findViewById(R.id.btnJoinMeeting);
         final Button friendBut = findViewById(R.id.Friend_Button);
-        final Button returnToMain = findViewById(R.id.returnToMainButton);
+        final Button returnToMain = findViewById(R.id.returnToMainButtonInAParty);
         etMeetingId = findViewById(R.id.etMeetingId);
 
         btnCreate.setOnClickListener(v -> {
@@ -69,7 +69,7 @@ public class CreateOrJoinActivity extends AppCompatActivity {
         friendBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(CreateOrJoinActivity.this, FriendsActivity.class);
+                Intent i = new Intent(CreateOrJoinActivity.this, PartyRoom.class);
 
                 startActivity(i);
             }
