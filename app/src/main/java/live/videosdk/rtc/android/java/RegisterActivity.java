@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -27,13 +28,11 @@ public class RegisterActivity extends AppCompatActivity {
     //widgets
     EditText userET, passET, emailET;
     Button registerBtn;
+    TextView tv;
 
     //Firebase
     FirebaseAuth auth;
     DatabaseReference myRef;
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +44,19 @@ public class RegisterActivity extends AppCompatActivity {
         passET = findViewById(R.id.passwordEditText);
         emailET = findViewById(R.id.emailEditText);
         registerBtn = findViewById(R.id.buttonRegister);
+        tv = findViewById(R.id.ToLoginTv);
 
         // Firebase Auth
         auth = FirebaseAuth.getInstance();
+
+        tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(RegisterActivity.this,LoginActivity.class);
+                startActivity(i);
+            }
+        });
+
 
         // Adding Event Listener to Button Register
         registerBtn.setOnClickListener(new View.OnClickListener(){

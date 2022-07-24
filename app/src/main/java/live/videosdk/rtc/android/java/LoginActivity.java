@@ -2,6 +2,7 @@ package live.videosdk.rtc.android.java;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 //import android.widget.TextView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,9 +23,10 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
-//    EditText userETLogin;
+    //    EditText userETLogin;
     TextInputLayout passETLogin, userETLogin;
-    Button loginBtn, RegisterBtn;
+    Button loginBtn;
+    TextView textView;
 
     // Firebase
     FirebaseAuth auth;
@@ -37,7 +40,10 @@ public class LoginActivity extends AppCompatActivity {
         userETLogin = findViewById(R.id.emailLoginText);
         passETLogin = findViewById(R.id.passwordLoginText);
         loginBtn = findViewById(R.id.buttonLogin);
-        RegisterBtn = findViewById(R.id.ToRegisterBtn);
+        textView = findViewById(R.id.ToRegisterTv);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("Forget Me Not");
 
 
         // Firebase Auth
@@ -51,8 +57,8 @@ public class LoginActivity extends AppCompatActivity {
             finish();
         }
 
-        // Register Button
-        RegisterBtn.setOnClickListener(new View.OnClickListener() {
+        //to Register Tv
+        textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(LoginActivity.this, RegisterActivity.class);

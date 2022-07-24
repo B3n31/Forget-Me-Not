@@ -4,19 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@color/white"
     tools:context=".LoginActivity"
-    android:orientation="vertical"
-    android:padding="25dp">
+    >
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:popupTheme="@style/Theme.VideoSDKRTC"
+        app:titleTextColor="@color/white" />
 
     <TextView
-        android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Login"
-        android:layout_gravity="center"
         android:textAlignment="center"
-        android:gravity="center"
         android:textSize="40sp"
         android:textStyle="bold"
         android:layout_marginBottom="100dp"
@@ -31,14 +36,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/emailLoginText"
-            android:hint="Username"
+            android:hint="Email"
             android:textColorHint="@color/black"
             android:layout_marginBottom="50dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             style="@style/MaterialAlertDialog.Material3.Title.Text">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -48,6 +55,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/passwordLoginText"
             android:hint="Password"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:textColorHint="@color/black"
             app:passwordToggleEnabled="true"
             style="@style/MaterialAlertDialog.Material3.Title.Text">
@@ -56,27 +65,41 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"/>
-
         </com.google.android.material.textfield.TextInputLayout>
+
     </LinearLayout>
 
     <Button
         android:id="@+id/buttonLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="8dp"
         android:text="Login"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginTop="100dp"
-        android:layout_marginBottom="50dp"/>
+        android:textSize="30sp"
+        android:textStyle="bold"/>
 
-    <Button
-        android:id="@+id/ToRegisterBtn"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Register now!"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/buttonLogin" />
+        android:layout_height="30dp"
+        android:layout_marginTop="50dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="or,"
+            android:layout_marginStart="250dp"
+            android:textSize="24sp"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/ToRegisterTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="  Register"
+            android:textColor="@color/md_blue_400"
+            android:textSize="24sp"
+            android:textStyle="bold"/>
+    </LinearLayout>
 
 </LinearLayout>
