@@ -4,6 +4,15 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../../layout/custom_preview.xml" value="0.23703703703703705" />
+        <entry key="..\:/Git test/forget-me-not/app/src/main/res/layout/activity_chat.xml" value="0.25416666666666665" />
+        <entry key="..\:/Git test/forget-me-not/app/src/main/res/layout/activity_create_or_join.xml" value="0.25416666666666665" />
+        <entry key="..\:/Git test/forget-me-not/app/src/main/res/layout/activity_join.xml" value="0.25416666666666665" />
+        <entry key="..\:/Git test/forget-me-not/app/src/main/res/layout/activity_login.xml" value="0.18432971014492755" />
+        <entry key="..\:/Git test/forget-me-not/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
+        <entry key="..\:/Git test/forget-me-not/app/src/main/res/layout/item_message_list.xml" value="0.25416666666666665" />
+        <entry key="..\:/Git test/forget-me-not/app/src/main/res/layout/item_remote_peer.xml" value="0.25416666666666665" />
+        <entry key="..\:/Git test/forget-me-not/app/src/main/res/layout/party_room_layout.xml" value="0.25416666666666665" />
+        <entry key="..\:/Git test/forget-me-not/app/src/main/res/layout/user_item.xml" value="0.25416666666666665" />
         <entry key="app/src/main/res/drawable/circle.xml" value="0.1555" />
         <entry key="app/src/main/res/layout/activity_chat.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_create_or_join.xml" value="0.25" />
