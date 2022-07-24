@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton btnMic, btnWebcam, btnScreenShare;
     private FloatingActionButton btnLeave, btnChat, btnSwitchCameraMode, btnMore;
     private ImageButton btnAudioSelection;
-    private Button musicBtn, pauseBtn, stopBtn;
+    private Button musicBtn, stopBtn;
 
     private FirebaseAuth auth;
     private DatabaseReference myRef;
@@ -139,7 +139,6 @@ public class MainActivity extends AppCompatActivity {
         btnScreenShare = findViewById(R.id.btnScreenShare);
         uIds = new ArrayList<>();
         musicBtn = findViewById(R.id.musicBtn);
-        pauseBtn = findViewById(R.id.pauseBtn);
         stopBtn = findViewById(R.id.stopBtn);
 
         btnAudioSelection = (ImageButton) findViewById(R.id.btnAudioSelection);
@@ -190,16 +189,12 @@ public class MainActivity extends AppCompatActivity {
                 beginLrcPlay();
             }
         });
-        pauseBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPlayer.pause();
-            }
-        });
         stopBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mPlayer.stop();
+                if(mPlayer.isPlaying()) {
+                    mPlayer.stop();
+                }
             }
         });
         final String token = getIntent().getStringExtra("token");
