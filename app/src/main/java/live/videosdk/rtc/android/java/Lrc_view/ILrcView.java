@@ -5,21 +5,21 @@ import java.util.List;
 import live.videosdk.rtc.android.java.Lrc_view.impl.LrcRow;
 
 /**
- * 展示歌词的接口
+ * interface of lyrics
  */
 public interface ILrcView {
 
     /**
-     * 设置要展示的歌词行集合
+     * LrcRow sets
      */
     void setLrc(List<LrcRow> lrcRows);
 
     /**
-     * 音乐播放的时候调用该方法滚动歌词，高亮正在播放的那句歌词
+     * Highlight the row which is playing
      */
     void seekLrcToTime(long time);
     /**
-     * 设置歌词拖动时候的监听类
+     * listener when dragging the lyrics
      */
     void setListener(ILrcViewListener listener);
 }

@@ -46,7 +46,7 @@
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|screenSize" />
-        <activity android:name=".FriendsActivity"></activity>
+        <activity android:name=".PartyRoom"></activity>
         <meta-data
             android:name="notificationTitle"
             android:value="@string/notificationTitle" />

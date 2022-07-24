@@ -3,19 +3,22 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="app/src/main/res/layout/activity_chat.xml" value="0.1" />
+        <entry key="../../../../../layout/custom_preview.xml" value="0.23703703703703705" />
+        <entry key="app/src/main/res/layout/activity_chat.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_create_or_join.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_friend.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/layout/activity_friend_list.xml" value="0.28125" />
         <entry key="app/src/main/res/layout/activity_join.xml" value="0.13229166666666667" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.28229166666666666" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.13229166666666667" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_open.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/layout/activity_register.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/layout/activity_search_friend.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/layout/activity_view_friend.xml" value="0.28125" />
         <entry key="app/src/main/res/layout/friends_layout.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/layout/item_message_list.xml" value="0.28229166666666666" />
+        <entry key="app/src/main/res/layout/open_activity.xml" value="0.28125" />
         <entry key="app/src/main/res/menu/menu_logout.xml" value="0.28229166666666666" />
       </map>
     </option>

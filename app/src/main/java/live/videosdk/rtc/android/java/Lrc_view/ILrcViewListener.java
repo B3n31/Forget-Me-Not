@@ -2,11 +2,11 @@ package live.videosdk.rtc.android.java.Lrc_view;
 import live.videosdk.rtc.android.java.Lrc_view.impl.LrcRow;
 
 /**
- * 歌词拖动时候的监听类
+ * listener when dragging the lyrics
  */
 public interface ILrcViewListener {
     /**
-     * 当歌词被用户上下拖动的时候回调该方法    (ps:seek的过去式和过去分词为sought)
+     * After dragging the lyrics, revert to playing to the lyrics line
      */
     void onLrcSought(int newPosition, LrcRow row);
 }

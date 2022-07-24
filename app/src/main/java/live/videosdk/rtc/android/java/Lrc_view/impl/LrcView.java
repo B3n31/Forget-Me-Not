@@ -18,123 +18,117 @@ import live.videosdk.rtc.android.java.Lrc_view.ILrcViewListener;
 import java.util.List;
 
 /**
- * 自定义LrcView,可以同步显示歌词，拖动歌词，缩放歌词
+ * Design for LrcView
  */
 public class LrcView extends View implements ILrcView {
 
     public final static String TAG = "LrcView";
 
     /**
-     * 正常歌词模式
+     * Regular lyrics mode
      */
     public final static int DISPLAY_MODE_NORMAL = 0;
     /**
-     * 拖动歌词模式
+     * Dragging lyrics mode
      */
     public final static int DISPLAY_MODE_SEEK = 1;
     /**
-     * 缩放歌词模式
+     * Zoom in/out lyrics
      */
     public final static int DISPLAY_MODE_SCALE = 2;
     /**
-     * 歌词的当前展示模式
+     * Display lyrics
      */
     private int mDisplayMode = DISPLAY_MODE_NORMAL;
 
     /**
-     * 歌词集合，包含所有行的歌词
+     * lyrics row
      */
     private List<LrcRow> mLrcRows;
     /**
-     * 最小移动的距离，当拖动歌词时如果小于该距离不做处理
+     * Min movement for dragging
      */
     private int mMinSeekFiredOffset = 10;
 
     /**
-     * 当前高亮歌词的行数
+     * Numbers of highlight rows
      */
     private int mHighLightRow = 0;
     /**
-     * 当前高亮歌词的字体颜色为黄色
+     * Highlight color
      */
     private int mHighLightRowColor = Color.YELLOW;
     /**
-     * 不高亮歌词的字体颜色为白色
+     * non-Highlight color
      */
     private int mNormalRowColor = Color.WHITE;
 
     /**
-     * 拖动歌词时，在当前高亮歌词下面的一条直线的字体颜色
+     * Color of the line below
      **/
     private int mSeekLineColor = Color.CYAN;
     /**
-     * 拖动歌词时，展示当前高亮歌词的时间的字体颜色
+     * Highlight color when dragging
      **/
     private int mSeekLineTextColor = Color.CYAN;
     /**
-     * 拖动歌词时，展示当前高亮歌词的时间的字体大小默认值
+     * Highlight row text size
      **/
     private int mSeekLineTextSize = 15;
     /**
-     * 拖动歌词时，展示当前高亮歌词的时间的字体大小最小值
+     * Highlight row text min size
      **/
     private int mMinSeekLineTextSize = 13;
     /**
-     * 拖动歌词时，展示当前高亮歌词的时间的字体大小最大值
+     * Highlight row text max size
      **/
     private int mMaxSeekLineTextSize = 18;
 
     /**
-     * 歌词字体大小默认值
+     * default text size
      **/
     private int mLrcFontSize = 35;    // font size of lrc
     /**
-     * 歌词字体大小最小值
+     * text min size
      **/
     private int mMinLrcFontSize = 15;
     /**
-     * 歌词字体大小最大值
+     * text max size
      **/
     private int mMaxLrcFontSize = 35;
 
     /**
-     * 两行歌词之间的间距
+     * The spacing between two lines of lyrics
      **/
     private int mPaddingY = 10;
     /**
-     * 拖动歌词时，在当前高亮歌词下面的一条直线的起始位置
+     * The starting position of a line under the highlight when dragging
      **/
     private int mSeekLinePaddingX = 0;
 
-    /**
-     * 拖动歌词的监听类，回调LrcViewListener类的onLrcSeeked方法
-     **/
     private ILrcViewListener mLrcViewListener;
 
     /**
-     * 当没有歌词的时候展示的内容
+     * When there's no lyrics
      **/
-    private String mLoadingLrcTip = "Downloading lrc...";
+    private String mLoadingLrcTip = "Waiting for the song";
 
     private Paint mPaint;
 
     /**
-     * 当前播放的时间
+     * Current playing time
      */
     long currentMillis;
 
     /**
-     * 歌词高亮的模式 正常高亮模式
+     * Regular Highlight
      */
     private int MODE_HIGH_LIGHT_NORMAL = 0;
     /**
-     * 歌词高亮的模式 卡拉OK模式
+     * Karaoke mode
      */
     private int MODE_HIGH_LIGHT_KARAOKE = 1;
 
-    /**
-     * 歌词高亮的模式   卡拉OK模式和正常高亮模式
-     */
     private int mode = MODE_HIGH_LIGHT_KARAOKE;
 
 
@@ -156,7 +150,7 @@ public class LrcView extends View implements ILrcView {
     protected void onDraw(Canvas canvas) {
         final int height = getHeight(); // height of this view
         final int width = getWidth(); // width of this view
-        //当没有歌词的时候
+        //When no lyrics
         if (mLrcRows == null || mLrcRows.size() == 0) {
             if (mLoadingLrcTip != null) {
                 // draw tip when no lrc.
@@ -171,52 +165,39 @@ public class LrcView extends View implements ILrcView {
         int rowY = 0; // vertical point of each row.
         final int rowX = width / 2;
         int rowNum = 0;
-        /**
-         * 分以下三步来绘制歌词：
-         *
-         * 	第1步：高亮地画出正在播放的那句歌词
-         *	第2步：画出正在播放的那句歌词的上面可以展示出来的歌词
-         *	第3步：画出正在播放的那句歌词的下面的可以展示出来的歌词
-         */
 
-        // 1、 高亮地画出正在要高亮的的那句歌词
+
+        // Highlight the lyric that is being highlighted
         int highlightRowY = height / 2 - mLrcFontSize;
 
         if (mode == MODE_HIGH_LIGHT_KARAOKE){
-            // 卡拉OK模式 逐字高亮
+            // Karaoke mode is highlighted word for word
             drawKaraokeHighLightLrcRow(canvas, width, rowX, highlightRowY);
         } else {
-            // 正常高亮
+            // Normal highlight
             drawHighLrcRow(canvas, height, rowX, highlightRowY);
         }
 
-        // 上下拖动歌词的时候 画出拖动要高亮的那句歌词的时间 和 高亮的那句歌词下面的一条直线
         if (mDisplayMode == DISPLAY_MODE_SEEK) {
-            // 画出高亮的那句歌词下面的一条直线
+            // Draw a line below the highlighted line
             mPaint.setColor(mSeekLineColor);
-            //该直线的x坐标从0到屏幕宽度  y坐标为高亮歌词和下一行歌词中间
+            //The line x coordinates from 0 to the screen width y coordinates are between the highlight lyrics and the next line of lyrics
             canvas.drawLine(mSeekLinePaddingX, highlightRowY + mPaddingY, width - mSeekLinePaddingX, highlightRowY + mPaddingY, mPaint);
 
-            // 画出高亮的那句歌词的时间
+            // The time to highlight the lyrics
             mPaint.setColor(mSeekLineTextColor);
             mPaint.setTextSize(mSeekLineTextSize);
             mPaint.setTextAlign(Align.LEFT);
             canvas.drawText(mLrcRows.get(mHighLightRow).startTimeString, 0, highlightRowY, mPaint);
         }
 
-        // 2、画出正在播放的那句歌词的上面可以展示出来的歌词
         mPaint.setColor(mNormalRowColor);
         mPaint.setTextSize(mLrcFontSize);
         mPaint.setTextAlign(Align.CENTER);
         rowNum = mHighLightRow - 1;
         rowY = highlightRowY - mPaddingY - mLrcFontSize;
-        //只画出正在播放的那句歌词的上一句歌词
-//        if (rowY > -mLrcFontSize && rowNum >= 0) {
-//            String text = mLrcRows.get(rowNum).content;
-//            canvas.drawText(text, rowX, rowY, mPaint);
-//        }
 
-        //画出正在播放的那句歌词的上面所有的歌词
+        //Draw all the words above the line that is playing
         while (rowY > -mLrcFontSize && rowNum >= 0) {
             String text = mLrcRows.get(rowNum).content;
             canvas.drawText(text, rowX, rowY, mPaint);
@@ -224,17 +205,10 @@ public class LrcView extends View implements ILrcView {
             rowNum--;
         }
 
-        // 3、画出正在播放的那句歌词的下面的可以展示出来的歌词
         rowNum = mHighLightRow + 1;
         rowY = highlightRowY + mPaddingY + mLrcFontSize;
 
-        //只画出正在播放的那句歌词的下一句歌词
-//        if (rowY < height && rowNum < mLrcRows.size()) {
-//            String text2 = mLrcRows.get(rowNum).content;
-//            canvas.drawText(text2, rowX, rowY, mPaint);
-//        }
-
-        //画出正在播放的那句歌词的所有下面的可以展示出来的歌词
+        //Draw all of the lyrics that can be displayed below the line that is being played
         while (rowY < height && rowNum < mLrcRows.size()) {
             String text = mLrcRows.get(rowNum).content;
             canvas.drawText(text, rowX, rowY, mPaint);
@@ -248,21 +222,21 @@ public class LrcView extends View implements ILrcView {
         LrcRow highLrcRow = mLrcRows.get(mHighLightRow);
         String highlightText = highLrcRow.content;
 
-        // 先画一层普通颜色的
+        // Regular color
         mPaint.setColor(mNormalRowColor);
         mPaint.setTextSize(mLrcFontSize);
         mPaint.setTextAlign(Align.CENTER);
         canvas.drawText(highlightText, rowX, highlightRowY, mPaint);
 
-        // 再画一层高亮颜色的
+        // Highlight color
         int highLineWidth = (int) mPaint.measureText(highlightText);
         int leftOffset = (width - highLineWidth) / 2;
         long start = highLrcRow.getStartTime();
         long end = highLrcRow.getEndTime();
-        // 高亮的宽度
+        // Highlight color hight
         int highWidth = (int) ((currentMillis - start) * 1.0f / (end - start) * highLineWidth);
         if (highWidth > 0) {
-            //画一个 高亮的bitmap
+            //bitmap for highlight
             mPaint.setColor(mHighLightRowColor);
             Bitmap textBitmap = Bitmap.createBitmap(highWidth, highlightRowY + mPaddingY, Bitmap.Config.ARGB_8888);
             Canvas textCanvas = new Canvas(textBitmap);
@@ -280,11 +254,8 @@ public class LrcView extends View implements ILrcView {
     }
 
     /**
-     * 设置要高亮的歌词为第几行歌词
-     *
-     * @param position 要高亮的歌词行数
-     * @param cb       是否是手指拖动后要高亮的歌词
-     */
+     *Set the number of line of lyrics to be highlighted
+     **/
     public void seekLrc(int position, boolean cb) {
         if (mLrcRows == null || position < 0 || position > mLrcRows.size()) {
             return;
@@ -292,26 +263,23 @@ public class LrcView extends View implements ILrcView {
         LrcRow lrcRow = mLrcRows.get(position);
         mHighLightRow = position;
         invalidate();
-        //如果是手指拖动歌词后
+        //After dragging
         if (mLrcViewListener != null && cb) {
-            //回调onLrcSeeked方法，将音乐播放器播放的位置移动到高亮歌词的位置
+            //Call the onLrcSeeked method to move the music player to the position where the lyrics are highlighted
             mLrcViewListener.onLrcSought(position, lrcRow);
         }
     }
 
     private float mLastMotionY;
     /**
-     * 第一个手指的坐标
+     * The coordinates of the first finger
      **/
     private PointF mPointerOneLastMotion = new PointF();
     /**
-     * 第二个手指的坐标
+     * The coordinates of the second finger
      **/
     private PointF mPointerTwoLastMotion = new PointF();
-    /**
-     * 是否是第一次移动，当一个手指按下后开始移动的时候，设置为true,
-     * 当第二个手指按下的时候，即两个手指同时移动的时候，设置为false
-     */
+
     private boolean mIsFirstMove = false;
 
     @Override
@@ -320,14 +288,14 @@ public class LrcView extends View implements ILrcView {
             return super.onTouchEvent(event);
         }
         switch (event.getAction()) {
-            //手指按下
+            //finger down
             case MotionEvent.ACTION_DOWN:
                 Log.d(TAG, "down,mLastMotionY:" + mLastMotionY);
                 mLastMotionY = event.getY();
                 mIsFirstMove = true;
                 invalidate();
                 break;
-            //手指移动
+            //finger moving
             case MotionEvent.ACTION_MOVE:
                 if (event.getPointerCount() == 2) {
                     Log.d(TAG, "two move");
@@ -336,19 +304,18 @@ public class LrcView extends View implements ILrcView {
                 }
                 Log.d(TAG, "one move");
                 // single pointer mode ,seek
-                //如果是双指同时按下，进行歌词大小缩放，抬起其中一个手指，另外一个手指不离开屏幕地移动的话，不做任何处理
+                //If you press both fingers at the same time, zoom in and out, lift one finger and move the other finger without leaving the screen, nothing is done
                 if (mDisplayMode == DISPLAY_MODE_SCALE) {
                     //if scaling but pointer become not two ,do nothing.
                     return true;
                 }
-                //如果一个手指按下，在屏幕上移动的话，拖动歌词上下
+                //One finger moving up/down, dragging
                 doSeek(event);
                 break;
             case MotionEvent.ACTION_CANCEL:
-                //手指抬起
             case MotionEvent.ACTION_UP:
                 if (mDisplayMode == DISPLAY_MODE_SEEK) {
-                    //高亮手指抬起时的歌词并播放从该句歌词开始播放
+                    //Highlight the lyrics as your finger is lifted and play from there
                     seekLrc(mHighLightRow, true);
                 }
                 mDisplayMode = DISPLAY_MODE_NORMAL;
@@ -359,12 +326,12 @@ public class LrcView extends View implements ILrcView {
     }
 
     /**
-     * 处理双指在屏幕移动时的，歌词大小缩放
+     * Zoom in/out part
      */
     private void doScale(MotionEvent event) {
-        //如果歌词的模式为：拖动歌词模式
+        //If Dragging mode:
         if (mDisplayMode == DISPLAY_MODE_SEEK) {
-            //如果是单指按下，在进行歌词上下滚动，然后按下另外一个手指，则把歌词模式从 拖动歌词模式 变为 缩放歌词模式
+            //If you press with one finger, scroll the lyrics up and down, and then press the other finger to change the lyrics mode from drag to zoom
             mDisplayMode = DISPLAY_MODE_SCALE;
             Log.d(TAG, "change mode from DISPLAY_MODE_SEEK to DISPLAY_MODE_SCALE");
             return;
@@ -374,13 +341,13 @@ public class LrcView extends View implements ILrcView {
             mDisplayMode = DISPLAY_MODE_SCALE;
             invalidate();
             mIsFirstMove = false;
-            //两个手指的x坐标和y坐标
+            //The x and y coordinates of the two fingers
             setTwoPointerLocation(event);
         }
-        //获取歌词大小要缩放的比例
+        //Gets the scale to which the size of the lyrics should be scaled
         int scaleSize = getScale(event);
         Log.d(TAG, "scaleSize:" + scaleSize);
-        //如果缩放大小不等于0，进行缩放，重绘LrcView
+        //if not equal 0, re-draw the lrcView
         if (scaleSize != 0) {
             setNewFontSize(scaleSize);
             invalidate();
@@ -389,33 +356,31 @@ public class LrcView extends View implements ILrcView {
     }
 
     /**
-     * 处理单指在屏幕移动时，歌词上下滚动
+     * Dragging part
      */
     private void doSeek(MotionEvent event) {
-        float y = event.getY();//手指当前位置的y坐标
-        float offsetY = y - mLastMotionY; //第一次按下的y坐标和目前移动手指位置的y坐标之差
-        //如果移动距离小于10，不做任何处理
+        float y = event.getY();
+        float offsetY = y - mLastMotionY; // The difference between the y coordinate of the first press and the y coordinate of the current moving finger position
+        // If difference < 10, do nothing
         if (Math.abs(offsetY) < mMinSeekFiredOffset) {
             return;
         }
-        //将模式设置为拖动歌词模式
+        //change the mode to dragging
         mDisplayMode = DISPLAY_MODE_SEEK;
-        int rowOffset = Math.abs((int) offsetY / mLrcFontSize); //歌词要滚动的行数
+        int rowOffset = Math.abs((int) offsetY / mLrcFontSize); //The number of lines to scroll
 
         Log.d(TAG, "move to new hightlightrow : " + mHighLightRow + " offsetY: " + offsetY + " rowOffset:" + rowOffset);
 
         if (offsetY < 0) {
-            //手指向上移动，歌词向下滚动
-            mHighLightRow += rowOffset;//设置要高亮的歌词为 当前高亮歌词 向下滚动rowOffset行后的歌词
+            //Fingers move up, lyrics scroll down
+            mHighLightRow += rowOffset;
         } else if (offsetY > 0) {
-            //手指向下移动，歌词向上滚动
-            mHighLightRow -= rowOffset;//设置要高亮的歌词为 当前高亮歌词 向上滚动rowOffset行后的歌词
+            //Fingers move down, lyrics scroll up
+            mHighLightRow -= rowOffset;
         }
-        //设置要高亮的歌词为0和mHignlightRow中的较大值，即如果mHignlightRow < 0，mHighLightRow=0
         mHighLightRow = Math.max(0, mHighLightRow);
-        //设置要高亮的歌词为0和mHignlightRow中的较小值，即如果mHignlight > RowmLrcRows.size()-1，mHighLightRow=mLrcRows.size()-1
         mHighLightRow = Math.min(mHighLightRow, mLrcRows.size() - 1);
-        //如果歌词要滚动的行数大于0，则重画LrcView
+        // If the number of lines to scroll is greater than 0, redraw LrcView
         if (rowOffset > 0) {
             mLastMotionY = y;
             invalidate();
@@ -423,7 +388,7 @@ public class LrcView extends View implements ILrcView {
     }
 
     /**
-     * 设置当前两个手指的x坐标和y坐标
+     * Sets the x and y coordinates of the current two fingers
      */
     private void setTwoPointerLocation(MotionEvent event) {
         mPointerOneLastMotion.x = event.getX(0);
@@ -433,22 +398,20 @@ public class LrcView extends View implements ILrcView {
     }
 
     /**
-     * 设置缩放后的字体大小
+     * Set the font size after scaling
      */
     private void setNewFontSize(int scaleSize) {
-        //设置歌词缩放后的的最新字体大小
         mLrcFontSize += scaleSize;
         mLrcFontSize = Math.max(mLrcFontSize, mMinLrcFontSize);
         mLrcFontSize = Math.min(mLrcFontSize, mMaxLrcFontSize);
 
-        //设置显示高亮的那句歌词的时间最新字体大小
         mSeekLineTextSize += scaleSize;
         mSeekLineTextSize = Math.max(mSeekLineTextSize, mMinSeekLineTextSize);
         mSeekLineTextSize = Math.min(mSeekLineTextSize, mMaxSeekLineTextSize);
     }
 
     /**
-     * 获取歌词大小要缩放的比例
+     * Gets the scale to which the size of the lyrics should be scaled
      */
     private int getScale(MotionEvent event) {
         Log.d(TAG, "scaleSize getScale");
@@ -460,40 +423,36 @@ public class LrcView extends View implements ILrcView {
         float maxOffset = 0; // max offset between x or y axis,used to decide scale size
 
         boolean zooMin = false;
-        //第一次双指之间的x坐标的差距
+        //The x-coordinate difference between the first two fingers
         float oldXOffset = Math.abs(mPointerOneLastMotion.x - mPointerTwoLastMotion.x);
-        //第二次双指之间的x坐标的差距
+        //The difference between the x-coordinates of the second two fingers
         float newXOffset = Math.abs(x1 - x0);
 
-        //第一次双指之间的y坐标的差距
+        //The y-coordinate difference between the first two fingers
         float oldYOffset = Math.abs(mPointerOneLastMotion.y - mPointerTwoLastMotion.y);
-        //第二次双指之间的y坐标的差距
+        //The difference between the y-coordinates of the second two fingers
         float newYOffset = Math.abs(y1 - y0);
 
-        //双指移动之后，判断双指之间移动的最大差距
+        //After the two fingers move, judge the maximum difference between the two fingers
         maxOffset = Math.max(Math.abs(newXOffset - oldXOffset), Math.abs(newYOffset - oldYOffset));
-        //如果x坐标移动的多一些
+        //If move the x coordinate a little bit more
         if (maxOffset == Math.abs(newXOffset - oldXOffset)) {
-            //如果第二次双指之间的x坐标的差距大于第一次双指之间的x坐标的差距则是放大，反之则缩小
             zooMin = newXOffset > oldXOffset ? true : false;
         }
-        //如果y坐标移动的多一些
+        //If move the y coordinate a little bit more
         else {
-            //如果第二次双指之间的y坐标的差距大于第一次双指之间的y坐标的差距则是放大，反之则缩小
             zooMin = newYOffset > oldYOffset ? true : false;
         }
         Log.d(TAG, "scaleSize maxOffset:" + maxOffset);
         if (zooMin) {
-            return (int) (maxOffset / 10);//放大双指之间移动的最大差距的1/10
+            return (int) (maxOffset / 10);//Magnify the maxi distance between fingers by 1/10
         } else {
-            return -(int) (maxOffset / 10);//缩小双指之间移动的最大差距的1/10
+            return -(int) (maxOffset / 10);//Magnify the min distance between fingers by 1/10
         }
     }
 
     /**
-     * 设置歌词行集合
-     *
-     * @param lrcRows
+     * Setting the lrcRow
      */
     public void setLrc(List<LrcRow> lrcRows) {
         mLrcRows = lrcRows;
@@ -501,9 +460,7 @@ public class LrcView extends View implements ILrcView {
     }
 
     /**
-     * 播放的时候调用该方法滚动歌词，高亮正在播放的那句歌词
-     *
-     * @param time
+     * Call this method while playing to scroll the lyrics and highlight the current lyrics
      */
     public void seekLrcToTime(long time) {
         if (mLrcRows == null || mLrcRows.size() == 0) {
@@ -520,8 +477,8 @@ public class LrcView extends View implements ILrcView {
             LrcRow current = mLrcRows.get(i);
             LrcRow next = i + 1 == mLrcRows.size() ? null : mLrcRows.get(i + 1);
             /**
-             *  正在播放的时间大于current行的歌词的时间而小于next行歌词的时间， 设置要高亮的行为current行
-             *  正在播放的时间大于current行的歌词，而current行为最后一句歌词时，设置要高亮的行为current行
+             * Set the behavior of the current line to be highlighted if the time of the current line is longer than the time of the next line
+             * Set the current line to be highlighted when the current line is playing for longer than the last line of the current line
              */
             if ((time >= current.startTime && next != null && time < next.startTime)
                     || (time > current.startTime && next == null)) {
