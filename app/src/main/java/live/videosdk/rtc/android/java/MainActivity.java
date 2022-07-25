@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = auth.getCurrentUser();
-       meetingId = getIntent().getStringExtra("meetingId");
+        meetingId = getIntent().getStringExtra("meetingId");
         String userid = firebaseUser.getUid();
         FirebaseDatabase.getInstance().getReference("Rooms").child(meetingId).child(auth.getCurrentUser().
                 getUid()).child("Role").setValue(getIntent().getStringExtra("Role"));
@@ -190,7 +190,13 @@ public class MainActivity extends AppCompatActivity {
         switchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (mPlayer.isPlaying()){
+                    mPlayer.stop();
+                }
                 num_song++;
+                if (num_song > 2){
+                    num_song = 1;
+                }
                 beginLrcPlay(num_song);
             }
         });
@@ -309,10 +315,6 @@ public class MainActivity extends AppCompatActivity {
         }
         else if (num_song == 2){
             song = Song2;
-        }
-        else if (num_song > 2){
-            num_song = 1;
-            song = Song1;
         }
 
         HashMap<String, String> dataMap = new HashMap<>();
