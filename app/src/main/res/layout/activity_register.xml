@@ -28,7 +28,7 @@
         tools:ignore="MissingConstraints" />
 
     <EditText
-        android:id="@+id/userEditText"
+        android:id="@+id/emailEditText"
         android:layout_width="347dp"
         android:layout_height="44dp"
         android:layout_marginStart="24dp"
@@ -57,7 +57,7 @@
         app:layout_constraintTop_toBottomOf="@+id/userEditText" />
 
     <EditText
-        android:id="@+id/emailEditText"
+        android:id="@+id/userEditText"
         android:layout_width="347dp"
         android:layout_height="44dp"
         android:layout_marginStart="24dp"
