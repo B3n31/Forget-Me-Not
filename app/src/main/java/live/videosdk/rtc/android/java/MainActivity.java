@@ -85,10 +85,9 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton btnMic, btnWebcam, btnScreenShare;
     private FloatingActionButton btnLeave, btnChat, btnSwitchCameraMode, btnMore;
     private ImageButton btnAudioSelection;
-    private Button musicBtn, stopBtn;
+    private Button musicBtn, stopBtn, switchBtn;
 
     private FirebaseAuth auth;
-    private DatabaseReference myRef;
 
     private boolean micEnabled = true;
     private boolean webcamEnabled = true;
@@ -106,18 +105,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int CAPTURE_PERMISSION_REQUEST_CODE = 1;
 
     private Timer timer = new Timer();
-    MediaPlayer mediaPlayer;
 
-    // creating a string for storing
-    // our audio url from firebase.
-    String audioUrl;
-
-    // creating a variable for our Firebase Database.
-    FirebaseDatabase firebaseDatabase;
-
-    // creating a variable for our
-    // Database Reference for Firebase.
-    DatabaseReference databaseReference;
 
     //for lrc usages
     public final static String TAG = "MainActivity";
@@ -128,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
     private MediaPlayer mPlayer;
     private String lrc;
     private String meetingId;
+    private int num_song = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
         uIds = new ArrayList<>();
         musicBtn = findViewById(R.id.musicBtn);
         stopBtn = findViewById(R.id.stopBtn);
+        switchBtn = findViewById(R.id.switchBtn);
 
         btnAudioSelection = (ImageButton) findViewById(R.id.btnAudioSelection);
         btnAudioSelection.setEnabled(false);
@@ -186,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
         musicBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                beginLrcPlay();
+                beginLrcPlay(num_song);
             }
         });
         stopBtn.setOnClickListener(new View.OnClickListener() {
@@ -197,6 +187,14 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        switchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                num_song++;
+                beginLrcPlay(num_song);
+            }
+        });
+
         final String token = getIntent().getStringExtra("token");
 
         micEnabled = getIntent().getBooleanExtra("micEnabled", true);
@@ -300,23 +298,39 @@ public class MainActivity extends AppCompatActivity {
         return "";
     }
     //for lrc usages
-    public void beginLrcPlay(){
+    public void beginLrcPlay(int num_song){
 
         mPlayer = new MediaPlayer();
+        String Song1 = "https://firebasestorage.googleapis.com/v0/b/forget-me-not-42f8e.appspot.com/o/JoshWoodward-Saboteurs.mp3?alt=media&token=d6b786ea-e6e2-4890-9174-c4d49fa8183e";
+        String Song2 = "https://firebasestorage.googleapis.com/v0/b/forget-me-not-42f8e.appspot.com/o/JoshWoodward-Ashes-01-LetItIn.mp3?alt=media&token=8fc494bf-2e6a-4798-8bf4-94497913599a";
+        String song = "";
+        if (num_song == 1){
+            song = Song1;
+        }
+        else if (num_song == 2){
+            song = Song2;
+        }
+        else if (num_song > 2){
+            num_song = 1;
+            song = Song1;
+        }
 
         HashMap<String, String> dataMap = new HashMap<>();
-        dataMap.put("music","https://firebasestorage.googleapis.com/v0/b/forget-me-not-42f8e.appspot.com/o/Fool%2527s%20Garden%20-%20Lemon%20Tree.mp3?alt=media&token=4dc8490c-1cd1-449b-aec4-48349f6857cd");
+        dataMap.put("music", song);
         for(int i = 0 ; i < uIds.size() ; i++ ) {
             FirebaseDatabase.getInstance().getReference().child("MyUsers").child(uIds.get(i)).child("play_this_link").push().setValue(dataMap);
         }
         for(int i = 0 ; i < uIds.size() ; i++ ){
+            String finalSong = song;
+            int finalNum_song = num_song;
+            String finalSong1 = song;
             FirebaseDatabase.getInstance().getReference().child("MyUsers").child(uIds.get(i)).child("play_this_link").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    linkOfTheSong = "https://firebasestorage.googleapis.com/v0/b/forget-me-not-42f8e.appspot.com/o/Fool%2527s%20Garden%20-%20Lemon%20Tree.mp3?alt=media&token=4dc8490c-1cd1-449b-aec4-48349f6857cd";
+                    linkOfTheSong = finalSong;
                     try{
                         //you can change the path, here path is external directory(e.g. sdcard) /Music/maine.mp3
-                        lyrics();
+                        lyrics(finalNum_song, finalSong1);
                         mPlayer.setDataSource(linkOfTheSong);
 
                         mPlayer.prepare();
@@ -330,11 +344,11 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
-        lyrics();
+        lyrics(num_song, song);
     }
-    public void lyrics(){
+    public void lyrics(int num_song, String song){
         try {
-            mPlayer.setDataSource("https://firebasestorage.googleapis.com/v0/b/forget-me-not-42f8e.appspot.com/o/Fool%2527s%20Garden%20-%20Lemon%20Tree.mp3?alt=media&token=4dc8490c-1cd1-449b-aec4-48349f6857cd");
+            mPlayer.setDataSource(song);
             //Start PreparedListener
             mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 //Finishing prepare
@@ -362,7 +376,12 @@ public class MainActivity extends AppCompatActivity {
             mLrcView=(ILrcView)findViewById(R.id.lrcView);
 
             //Read lyrics from Assets file
-            lrc = getFromAssets("Fool's Garden - Lemon Tree.lrc");
+            if (num_song == 1){
+                lrc = getFromAssets("JoshWoodward-Saboteurs.lrc");
+            }
+            else if (num_song == 2){
+                lrc = getFromAssets("JoshWoodward-Ashes-01-LetItIn.lrc");
+            }
             //Parsing lyrics
             ILrcBuilder builder = new DefaultLrcBuilder();
             //Return lyrics to LrcRow
