@@ -69,7 +69,6 @@ public class CreateOrJoinActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(CreateOrJoinActivity.this, PartyRoom.class);
-
                 startActivity(i);
             }
         });
@@ -102,7 +101,6 @@ public class CreateOrJoinActivity extends AppCompatActivity {
             Snackbar.make(findViewById(R.id.layout), "No Internet Connection",
                     Snackbar.LENGTH_LONG).show();
         }
-
         return isAvailable;
     }
 
@@ -128,7 +126,6 @@ public class CreateOrJoinActivity extends AppCompatActivity {
             } else {
                 joinMeeting(AUTH_TOKEN, meetingId);
             }
-
             return;
         }
 
@@ -157,14 +154,11 @@ public class CreateOrJoinActivity extends AppCompatActivity {
                                     anError.getErrorDetail(), Toast.LENGTH_SHORT).show();
                         }
                     });
-
             return;
         }
 
         Toast.makeText(CreateOrJoinActivity.this,
                 "Please Provide auth_token or auth_url", Toast.LENGTH_SHORT).show();
-
-
     }
 
 
@@ -222,7 +216,6 @@ public class CreateOrJoinActivity extends AppCompatActivity {
     }
 
     // Adding Logout Functionality
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_logout, menu);

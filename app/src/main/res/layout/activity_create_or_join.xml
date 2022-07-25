@@ -2,12 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+
     android:id="@+id/layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white"
     tools:context=".CreateOrJoinActivity">
-
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -17,29 +18,118 @@
         app:popupTheme="@style/Theme.VideoSDKRTC"
         app:titleTextColor="@color/white" />
 
-
-    <LinearLayout
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_height="45dp"
+        android:text="Create or Join"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:textAlignment="center"/>
+
+    <androidx.gridlayout.widget.GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="580dp"
+        app:columnCount="2"
+        app:rowCount="3"
+        android:layout_marginTop="30dp">
 
         <Button
             android:id="@+id/Friend_Button"
-            android:layout_width="164dp"
-            android:layout_height="wrap_content"
+            android:layout_width="170dp"
+            android:layout_height="170dp"
             android:text="join a party"
-            android:textColor="#FFFFFF" />
+            android:textSize="25sp"
+            app:layout_column="0"
+            app:layout_gravity="center"
+            app:layout_row="0"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/circle"/>
 
         <Button
             android:id="@+id/btnCreateMeeting"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="@string/create_meeting" />
+            android:layout_width="170dp"
+            android:layout_height="170dp"
+            android:text="@string/create_meeting"
+            android:textSize="25sp"
+            app:layout_column="1"
+            app:layout_gravity="center"
+            app:layout_row="0"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/circle"/>
 
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="170dp"
+            android:layout_height="170dp"
+            android:layout_marginVertical="16dp"
+            android:hint="@string/enter_meeting_id"
+            app:layout_column="0"
+            app:layout_gravity="center"
+            app:layout_row="1"
+            app:startIconDrawable="@drawable/ic_typewritter"
 
-    </LinearLayout>
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="10dp">
+
+            <EditText
+                android:id="@+id/etMeetingId"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/btnJoinMeeting"
+            android:layout_width="170dp"
+            android:layout_height="170dp"
+            android:text="@string/join_meeting"
+            android:textSize="25sp"
+            app:layout_column="1"
+            app:layout_gravity="center"
+            app:layout_row="1"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/circle"/>
+
+        <Button
+            android:layout_width="170dp"
+            android:layout_height="170dp"
+            android:text="n/a"
+            android:textSize="25sp"
+            app:layout_column="0"
+            app:layout_gravity="center"
+            app:layout_row="2"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/circle"/>
+
+        <Button
+            android:layout_width="170dp"
+            android:layout_height="170dp"
+            android:text="n/a"
+            android:textSize="25sp"
+            app:layout_column="1"
+            app:layout_gravity="center"
+            app:layout_row="2"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/circle"/>
+    </androidx.gridlayout.widget.GridLayout>
 
 
 </LinearLayout>

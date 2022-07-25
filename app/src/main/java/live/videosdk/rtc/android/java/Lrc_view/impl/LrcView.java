@@ -23,7 +23,6 @@ import java.util.List;
 public class LrcView extends View implements ILrcView {
 
     public final static String TAG = "LrcView";
-
     /**
      * Regular lyrics mode
      */
@@ -74,33 +73,33 @@ public class LrcView extends View implements ILrcView {
     /**
      * Highlight row text size
      **/
-    private int mSeekLineTextSize = 15;
+    private int mSeekLineTextSize = 30;
     /**
      * Highlight row text min size
      **/
-    private int mMinSeekLineTextSize = 13;
+    private int mMinSeekLineTextSize = 15;
     /**
      * Highlight row text max size
      **/
-    private int mMaxSeekLineTextSize = 18;
+    private int mMaxSeekLineTextSize = 35;
 
     /**
      * default text size
      **/
-    private int mLrcFontSize = 35;    // font size of lrc
+    private int mLrcFontSize = 130;    // font size of lrc
     /**
      * text min size
      **/
-    private int mMinLrcFontSize = 15;
+    private int mMinLrcFontSize = 110;
     /**
      * text max size
      **/
-    private int mMaxLrcFontSize = 35;
+    private int mMaxLrcFontSize = 150;
 
     /**
      * The spacing between two lines of lyrics
      **/
-    private int mPaddingY = 10;
+    private int mPaddingY = 100;
     /**
      * The starting position of a line under the highlight when dragging
      **/
