@@ -10,6 +10,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -43,7 +45,6 @@ public class CreateOrJoinActivity extends AppCompatActivity {
     private final String AUTH_TOKEN = BuildConfig.AUTH_TOKEN;
     private final String AUTH_URL = BuildConfig.AUTH_URL;
 
-    private EditText etMeetingId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,11 +58,11 @@ public class CreateOrJoinActivity extends AppCompatActivity {
 
         isNetworkAvailable();
 
-        final Button btnCreate = findViewById(R.id.btnCreateMeeting);
-        final Button btnJoin = findViewById(R.id.btnJoinMeeting);
-        final Button friendBut = findViewById(R.id.Friend_Button);
+        final LinearLayout btnCreate = findViewById(R.id.btnCreateMeeting);
+
+        final LinearLayout friendBut = findViewById(R.id.Friend_Button);
         final Button returnToMain = findViewById(R.id.returnToMainButtonInAParty);
-        etMeetingId = findViewById(R.id.etMeetingId);
+
 
         btnCreate.setOnClickListener(v -> {
             getToken(null);
@@ -74,18 +75,6 @@ public class CreateOrJoinActivity extends AppCompatActivity {
             }
         });
 
-        btnJoin.setOnClickListener(v -> {
-            String meetingId = etMeetingId.getText().toString().trim();
-            if ("".equals(meetingId)) {
-                Toast.makeText(CreateOrJoinActivity.this, "Please enter meeting ID",
-                        Toast.LENGTH_SHORT).show();
-            } else if (!meetingId.matches("\\w{4}\\-\\w{4}\\-\\w{4}")) {
-                Toast.makeText(CreateOrJoinActivity.this, "Please enter valid meeting ID",
-                        Toast.LENGTH_SHORT).show();
-            } else {
-                getToken(meetingId);
-            }
-        });
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();;
         myRef = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
@@ -217,7 +206,6 @@ public class CreateOrJoinActivity extends AppCompatActivity {
 
                         startActivity(intent);
 
-                        etMeetingId.getText().clear();
                     }
 
                     @Override

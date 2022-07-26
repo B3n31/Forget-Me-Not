@@ -51,6 +51,11 @@
 
     </com.google.android.material.appbar.MaterialToolbar>
 
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="7dp" />
+
     <org.webrtc.SurfaceViewRenderer
         android:id="@+id/svrShare"
         android:layout_width="wrap_content"
@@ -68,18 +73,20 @@
     <live.videosdk.rtc.android.java.Lrc_view.impl.LrcView
         android:id="@+id/lrcView"
         android:layout_width="match_parent"
-        android:layout_height="300dp" />
+        android:layout_height="243dp" />
+
+    <Button
+        android:id="@+id/switchBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Switch" />
 
     <Button
         android:id="@+id/musicBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Play a Song" />
-    <Button
-        android:id="@+id/pauseBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Pause" />
+
     <Button
         android:id="@+id/stopBtn"
         android:layout_width="match_parent"
@@ -165,8 +172,6 @@
             android:src="@drawable/ic_baseline_more_vert_24"
             app:fabSize="mini" />
     </LinearLayout>
-
-
 
 
 </LinearLayout>
