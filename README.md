@@ -27,7 +27,7 @@ In case adding the sdk.dir to local.properties does not work for Window, add AND
 ### Step 3: Add auth_token
 Please add the line below to your local.properties
 
-auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlrZXkiOiI0MGJjZGYyZC1kYzNkLTQ3YzktYjQ4ZS1jOWE1MWZhMzMyMWQiLCJwZXJtaXNzaW9ucyI6WyJhbGxvd19qb2luIl0sImlhdCI6MTY1Njk5NTUwMiwiZXhwIjoxNjU3NjAwMzAyfQ.SJILODMnECna2edeOjCCjO7q_6k3btQ4m_WfBvqWrCU
+auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlrZXkiOiJiZjFhNTM3Mi00ZTY3LTQwODMtOGFjOC00OGFlNDNmNjhkZjQiLCJwZXJtaXNzaW9ucyI6WyJhbGxvd19qb2luIl0sImlhdCI6MTY1ODcxMTYwNSwiZXhwIjoxNjU5MzE2NDA1fQ.g1DXRdUHShLS5uWX6JI0qf4oOlEebHCq4o66yQns0hw
 
 The above token is a token we will be using for app in this project. Please do not use this token for your own interest.
 
