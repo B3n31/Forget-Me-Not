@@ -10,6 +10,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -56,9 +58,9 @@ public class CreateOrJoinActivity extends AppCompatActivity {
 
         isNetworkAvailable();
 
-        final Button btnCreate = findViewById(R.id.btnCreateMeeting);
+        final LinearLayout btnCreate = findViewById(R.id.btnCreateMeeting);
 
-        final Button friendBut = findViewById(R.id.Friend_Button);
+        final LinearLayout friendBut = findViewById(R.id.Friend_Button);
         final Button returnToMain = findViewById(R.id.returnToMainButtonInAParty);
 
 
