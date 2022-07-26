@@ -33,7 +33,7 @@
         android:orientation="vertical"
         android:layout_gravity="center">
         <LinearLayout
-            android:id="@+id/Friend_Button"
+            android:id="@+id/LoFriend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
@@ -75,7 +75,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/btnCreateMeeting"
+            android:id="@+id/LoCreate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"

@@ -58,16 +58,15 @@ public class CreateOrJoinActivity extends AppCompatActivity {
 
         isNetworkAvailable();
 
-        final LinearLayout btnCreate = findViewById(R.id.btnCreateMeeting);
-
-        final LinearLayout friendBut = findViewById(R.id.Friend_Button);
+        final LinearLayout LoCreate = findViewById(R.id.LoCreate);
+        final LinearLayout LoFriend = findViewById(R.id.LoFriend);
         final Button returnToMain = findViewById(R.id.returnToMainButtonInAParty);
 
 
-        btnCreate.setOnClickListener(v -> {
+        LoCreate.setOnClickListener(v -> {
             getToken(null);
         });
-        friendBut.setOnClickListener(new View.OnClickListener() {
+        LoFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(CreateOrJoinActivity.this, PartyRoom.class);
