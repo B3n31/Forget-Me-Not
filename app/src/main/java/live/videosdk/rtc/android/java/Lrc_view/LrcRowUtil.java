@@ -6,10 +6,24 @@ import java.util.List;
 
 import live.videosdk.rtc.android.java.Lrc_view.impl.LrcRow;
 
+/**
+ * @Author: tingyuzhang
+ * @Time: 2022-07-15 8:18 afternoon
+ * @Team: Raging Coders
+ * @Description: create the list of lrcRow
+ */
+
+
 public class LrcRowUtil {
     public final static String TAG = "LrcRow";
 
-     //load all lyrics into lyrics builder
+    /**
+     * load all lyrics into lyrics builder
+     * @param standardLrcLine
+     * @return
+     */
+
+
     public static List<LrcRow> createRows(String standardLrcLine) {
         try {
             if (standardLrcLine.indexOf("[") != 0 || standardLrcLine.indexOf("]") != 9) {
@@ -43,6 +57,12 @@ public class LrcRowUtil {
             return null;
         }
     }
+
+    /**
+     * Set the time
+     * @param timeString
+     * @return
+     */
 
     private static long timeConvert(String timeString) {
         timeString = timeString.replace('.', ':');

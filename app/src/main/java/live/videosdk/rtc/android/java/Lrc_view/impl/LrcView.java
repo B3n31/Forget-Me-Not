@@ -18,10 +18,20 @@ import live.videosdk.rtc.android.java.Lrc_view.ILrcViewListener;
 import java.util.List;
 
 /**
+ * @Author: tingyuzhang
+ * @Time: 2022-07-15 5:40 afternoon
+ * @Team: Raging Coders
+ * @Description: All the features that lyrics part has.
+ */
+
+/**
  * Design for LrcView
  */
 public class LrcView extends View implements ILrcView {
 
+    /**
+     * The constant TAG.
+     */
     public final static String TAG = "LrcView";
     /**
      * Regular lyrics mode
@@ -86,15 +96,15 @@ public class LrcView extends View implements ILrcView {
     /**
      * default text size
      **/
-    private int mLrcFontSize = 130;    // font size of lrc
+    private int mLrcFontSize = 80;    // font size of lrc
     /**
      * text min size
      **/
-    private int mMinLrcFontSize = 110;
+    private int mMinLrcFontSize = 70;
     /**
      * text max size
      **/
-    private int mMaxLrcFontSize = 150;
+    private int mMaxLrcFontSize = 120;
 
     /**
      * The spacing between two lines of lyrics
@@ -110,7 +120,7 @@ public class LrcView extends View implements ILrcView {
     /**
      * When there's no lyrics
      **/
-    private String mLoadingLrcTip = "Waiting for the song";
+    private String mLoadingLrcTip = "Wait seconds...";
 
     private Paint mPaint;
 
@@ -131,16 +141,33 @@ public class LrcView extends View implements ILrcView {
     private int mode = MODE_HIGH_LIGHT_KARAOKE;
 
 
+    /**
+     * Instantiates a new Lrc view.
+     *
+     * @param context the context
+     * @param attr    the Attribute set
+     */
     public LrcView(Context context, AttributeSet attr) {
         super(context, attr);
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setTextSize(mLrcFontSize);
     }
 
+    /**
+     * lyrics listener
+     *
+     * @param listener
+     */
+
     public void setListener(ILrcViewListener listener) {
         mLrcViewListener = listener;
     }
 
+    /**
+     * Sets loading tip text.
+     *
+     * @param text text when songs are loading
+     */
     public void setLoadingTipText(String text) {
         mLoadingLrcTip = text;
     }
@@ -217,6 +244,15 @@ public class LrcView extends View implements ILrcView {
 
     }
 
+    /**
+     * Highlight lyrics row
+     *
+     * @param canvas
+     * @param width
+     * @param rowX
+     * @param highlightRowY
+     */
+
     private void drawKaraokeHighLightLrcRow(Canvas canvas, int width, int rowX, int highlightRowY) {
         LrcRow highLrcRow = mLrcRows.get(mHighLightRow);
         String highlightText = highLrcRow.content;
@@ -253,8 +289,11 @@ public class LrcView extends View implements ILrcView {
     }
 
     /**
-     *Set the number of line of lyrics to be highlighted
-     **/
+     * Set the number of line of lyrics to be highlighted
+     *
+     * @param position numbers of line that needs to be highlight
+     * @param cb       numbers of line that needs to be highlight after dragging
+     */
     public void seekLrc(int position, boolean cb) {
         if (mLrcRows == null || position < 0 || position > mLrcRows.size()) {
             return;
@@ -280,6 +319,10 @@ public class LrcView extends View implements ILrcView {
     private PointF mPointerTwoLastMotion = new PointF();
 
     private boolean mIsFirstMove = false;
+
+    /**
+     * @param event Motion events
+     */
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -326,6 +369,8 @@ public class LrcView extends View implements ILrcView {
 
     /**
      * Zoom in/out part
+     *
+     * @param event Motion events
      */
     private void doScale(MotionEvent event) {
         //If Dragging mode:
@@ -460,6 +505,7 @@ public class LrcView extends View implements ILrcView {
 
     /**
      * Call this method while playing to scroll the lyrics and highlight the current lyrics
+     * @param time
      */
     public void seekLrcToTime(long time) {
         if (mLrcRows == null || mLrcRows.size() == 0) {

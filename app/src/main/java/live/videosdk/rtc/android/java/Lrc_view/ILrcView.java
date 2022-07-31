@@ -4,6 +4,13 @@ import java.util.List;
 import live.videosdk.rtc.android.java.Lrc_view.impl.LrcRow;
 
 /**
+ * @Author: tingyuzhang
+ * @Time: 2022-07-15 7:40 afternoon
+ * @Team: Raging Coders
+ * @Description: interface/ view of lyrics
+ */
+
+/**
  * interface of lyrics
  */
 public interface ILrcView {

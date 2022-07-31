@@ -13,11 +13,26 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ * @Author: tingyuzhang
+ * @Time: 2022-07-15 2:48 afternoon
+ * @Team: Raging Coders
+ * @Description: Parse the lyrics
+ */
+
+/**
  * Parse the lyrics to get a set of LrcRow
  */
 public class DefaultLrcBuilder implements ILrcBuilder {
+    /**
+     * The Tag.
+     */
     static final String TAG = "DefaultLrcBuilder";
 
+    /**
+     *
+     * @param rawLrc context of lrc
+     * @return
+     */
     public List<LrcRow> getLrcRows(String rawLrc) {
         Log.d(TAG, "getLrcRows by rawString");
         if (rawLrc == null || rawLrc.length() == 0) {
