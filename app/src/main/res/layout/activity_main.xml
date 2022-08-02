@@ -32,14 +32,6 @@
             android:layout_gravity="end">
 
             <ImageButton
-                android:id="@+id/btnCopyContent"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginRight="15dp"
-                android:background="@color/colorPrimary"
-                android:src="@drawable/ic_outline_content_copy_24" />
-
-            <ImageButton
                 android:id="@+id/btnAudioSelection"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"

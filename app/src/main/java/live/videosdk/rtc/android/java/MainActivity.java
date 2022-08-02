@@ -216,7 +216,8 @@ public class MainActivity extends AppCompatActivity {
 
         //
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle(meetingId);
+        toolbar.setTitle("Forget Me Not");
+
 
         // pass the token generated from api server
         VideoSDK.config(token);
@@ -248,12 +249,6 @@ public class MainActivity extends AppCompatActivity {
 
         setAudioDeviceListeners();
 
-        ((ImageButton) findViewById(R.id.btnCopyContent)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                copyTextToClipboard(meetingId);
-            }
-        });
 
         btnAudioSelection.setOnClickListener(new View.OnClickListener() {
             @Override
