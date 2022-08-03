@@ -2,6 +2,7 @@ package live.videosdk.rtc.android.java;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -45,6 +46,9 @@ public class RegisterActivity extends AppCompatActivity {
         emailET = findViewById(R.id.emailEditText);
         registerBtn = findViewById(R.id.buttonRegister);
         tv = findViewById(R.id.ToLoginTv);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("Forget Me Not");
 
         // Firebase Auth
         auth = FirebaseAuth.getInstance();
