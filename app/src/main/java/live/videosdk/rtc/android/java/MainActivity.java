@@ -184,6 +184,7 @@ public class MainActivity extends AppCompatActivity {
                 index++;
             }
         });
+
         stopBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -293,7 +294,6 @@ public class MainActivity extends AppCompatActivity {
     }
     //for lrc usages
     public void beginLrcPlay(int num_song){
-
         mPlayer = new MediaPlayer();
         String Song1 = "https://firebasestorage.googleapis.com/v0/b/forget-me-not-42f8e.appspot.com/o/JoshWoodward-Saboteurs.mp3?alt=media&token=d6b786ea-e6e2-4890-9174-c4d49fa8183e";
         String Song2 = "https://firebasestorage.googleapis.com/v0/b/forget-me-not-42f8e.appspot.com/o/JoshWoodward-Ashes-01-LetItIn.mp3?alt=media&token=8fc494bf-2e6a-4798-8bf4-94497913599a";
@@ -752,7 +752,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     private void setActionListeners() {
         // Toggle mic
         btnMic.setOnClickListener(view -> {
@@ -831,29 +830,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-    private void toggleRecording() {
-        if (!recording) {
-            meeting.startRecording(null);
-        } else {
-            meeting.stopRecording();
-        }
-    }
-
-    private void toggleLivestreaming() {
-        if (!livestreaming) {
-            if (YOUTUBE_RTMP_URL == null || YOUTUBE_RTMP_STREAM_KEY == null) {
-                throw new Error("RTMP url or stream key missing.");
-            }
-
-            List<LivestreamOutput> outputs = new ArrayList<>();
-            outputs.add(new LivestreamOutput(YOUTUBE_RTMP_URL, YOUTUBE_RTMP_STREAM_KEY));
-
-            meeting.startLivestream(outputs);
-        } else {
-            meeting.stopLivestream();
-        }
-    }
 
     private void showMicRequestDialog(MicRequestListener listener) {
         new MaterialAlertDialogBuilder(MainActivity.this)
