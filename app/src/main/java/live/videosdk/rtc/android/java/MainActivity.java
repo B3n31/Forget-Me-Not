@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton btnMic, btnWebcam, btnScreenShare;
     private FloatingActionButton btnLeave, btnChat, btnSwitchCameraMode, btnMore;
     private ImageButton btnAudioSelection;
-    private Button musicBtn, stopBtn, switchBtn;
+    private Button musicBtn, stopBtn;
 
     private FirebaseAuth auth;
 
@@ -117,6 +117,8 @@ public class MainActivity extends AppCompatActivity {
     private String lrc;
     private String meetingId;
     private int num_song = 1;
+    private int index = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,7 +131,6 @@ public class MainActivity extends AppCompatActivity {
         uIds = new ArrayList<>();
         musicBtn = findViewById(R.id.musicBtn);
         stopBtn = findViewById(R.id.stopBtn);
-        switchBtn = findViewById(R.id.switchBtn);
 
         btnAudioSelection = (ImageButton) findViewById(R.id.btnAudioSelection);
         btnAudioSelection.setEnabled(false);
@@ -176,7 +177,14 @@ public class MainActivity extends AppCompatActivity {
         musicBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (index > 0){
+                    if (mPlayer.isPlaying()){
+                        mPlayer.stop();
+                    }
+                }
                 beginLrcPlay(num_song);
+                num_song++;
+                index++;
             }
         });
         stopBtn.setOnClickListener(new View.OnClickListener() {
@@ -187,19 +195,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        switchBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mPlayer.isPlaying()){
-                    mPlayer.stop();
-                }
-                num_song++;
-                if (num_song > 2){
-                    num_song = 1;
-                }
-                beginLrcPlay(num_song);
-            }
-        });
+
 
         final String token = getIntent().getStringExtra("token");
 
@@ -310,6 +306,9 @@ public class MainActivity extends AppCompatActivity {
         }
         else if (num_song == 2){
             song = Song2;
+        }
+        else if (num_song > 2){
+            num_song = 1;
         }
 
         HashMap<String, String> dataMap = new HashMap<>();

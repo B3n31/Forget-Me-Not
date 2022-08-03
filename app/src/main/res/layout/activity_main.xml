@@ -68,12 +68,6 @@
         android:layout_height="243dp" />
 
     <Button
-        android:id="@+id/switchBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Switch" />
-
-    <Button
         android:id="@+id/musicBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
