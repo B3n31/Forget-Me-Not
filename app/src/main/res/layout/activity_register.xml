@@ -17,81 +17,53 @@
         app:popupTheme="@style/Theme.VideoSDKRTC"
         app:titleTextColor="@color/white" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Register"
-        android:textAlignment="center"
-        android:textSize="40sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="50dp"
-        tools:ignore="MissingConstraints" />
-
     <EditText
         android:id="@+id/emailEditText"
-        android:layout_width="347dp"
-        android:layout_height="44dp"
-        android:layout_marginStart="24dp"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:layout_marginEnd="24dp"
-        android:ems="10"
+        android:layout_gravity="center"
         android:hint="Email"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/passwordEditText"
-        android:layout_width="348dp"
-        android:layout_height="44dp"
-        android:layout_marginStart="24dp"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:layout_marginEnd="24dp"
-        android:ems="10"
+        android:layout_gravity="center"
         android:hint="Password"
-        android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.533"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userEditText" />
+        android:inputType="textPassword" />
 
     <EditText
         android:id="@+id/userEditText"
-        android:layout_width="347dp"
-        android:layout_height="44dp"
-        android:layout_marginStart="24dp"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:layout_marginEnd="24dp"
-        android:ems="10"
+        android:layout_gravity="center"
         android:hint="Username"
-        android:inputType="textEmailAddress"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordEditText" />
+        android:inputType="textEmailAddress" />
 
     <Button
         android:id="@+id/buttonRegister"
-        android:layout_width="match_parent"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="8dp"
+        android:layout_gravity="center"
         android:text="Register"
+        android:layout_marginTop="50dp"
         android:textSize="30sp"
         android:textStyle="bold"/>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="or,"
-
-            android:layout_marginStart="250dp"
+            android:layout_marginStart="200dp"
             android:textSize="24sp"
             android:textStyle="bold"/>
         <TextView

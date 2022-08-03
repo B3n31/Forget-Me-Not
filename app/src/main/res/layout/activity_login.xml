@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/white"
-    tools:context=".LoginActivity"
-    >
+    tools:context=".LoginActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -17,79 +16,61 @@
         app:popupTheme="@style/Theme.VideoSDKRTC"
         app:titleTextColor="@color/white" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Login"
-        android:textAlignment="center"
-        android:textSize="40sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="100dp"
-        tools:ignore="MissingConstraints" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/emailLoginText"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_gravity="center"
+        android:hint="Email"
+        android:textColorHint="@color/black"
+        android:layout_marginTop="100dp"
+        style="@style/MaterialAlertDialog.Material3.Title.Text">
 
-        <com.google.android.material.textfield.TextInputLayout
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/passwordLoginText"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:hint="Password"
+        android:textColorHint="@color/black"
+        app:passwordToggleEnabled="true"
+        style="@style/MaterialAlertDialog.Material3.Title.Text">
+
+        <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/emailLoginText"
-            android:hint="Email"
-            android:textColorHint="@color/black"
-            android:layout_marginBottom="50dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            style="@style/MaterialAlertDialog.Material3.Title.Text">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/passwordLoginText"
-            android:hint="Password"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:textColorHint="@color/black"
-            app:passwordToggleEnabled="true"
-            style="@style/MaterialAlertDialog.Material3.Title.Text">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-    </LinearLayout>
+            android:inputType="textPassword"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/buttonLogin"
-        android:layout_width="match_parent"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_gravity="center"
         android:layout_marginTop="50dp"
-        android:layout_marginEnd="8dp"
         android:text="Login"
         android:textSize="30sp"
         android:textStyle="bold"/>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="or,"
-            android:layout_marginStart="250dp"
+            android:layout_marginStart="200dp"
             android:textSize="24sp"
             android:textStyle="bold"/>
         <TextView

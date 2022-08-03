@@ -16,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.error.ANError;
@@ -48,6 +49,10 @@ public class PartyRoom extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.party_room_layout);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("Room List");
+
         returnToCreateBtn = findViewById(R.id.returnToMainButtonInAParty);
         roomsList = findViewById(R.id.friendsListView);
         mAuth = FirebaseAuth.getInstance();

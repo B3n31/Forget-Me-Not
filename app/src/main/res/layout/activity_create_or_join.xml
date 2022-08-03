@@ -17,14 +17,6 @@
         app:popupTheme="@style/Theme.VideoSDKRTC"
         app:titleTextColor="@color/white" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:text="Create or Join"
-        android:textSize="40sp"
-        android:textStyle="bold"
-        android:layout_gravity="center"
-        android:textAlignment="center" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -34,8 +26,8 @@
         android:layout_gravity="center">
         <LinearLayout
             android:id="@+id/LoFriend"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="360dp"
+            android:layout_height="200dp"
             android:layout_marginTop="30dp"
             android:orientation="horizontal"
             android:layout_gravity="center"
@@ -76,8 +68,8 @@
 
         <LinearLayout
             android:id="@+id/LoCreate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="360dp"
+            android:layout_height="200dp"
             android:layout_marginTop="30dp"
             android:orientation="horizontal"
             android:layout_gravity="center"
@@ -102,13 +94,12 @@
                     tools:ignore="MissingClass" />
             </LinearLayout>
             <pl.droidsonroids.gif.GifImageView
-                android:layout_width="160dp"
+                android:layout_width="130dp"
                 android:layout_height="200dp"
                 android:layout_marginRight="5dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
                 android:src="@drawable/create_or_join_btn1"
-                android:textSize="50sp"
                 app:layout_gravity="center"
                 tools:ignore="MissingClass" />
         </LinearLayout>

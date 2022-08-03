@@ -18,7 +18,7 @@
         <entry key="app/src/main/res/layout/activity_create_or_join.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_friend.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/layout/activity_friend_list.xml" value="0.28125" />
-        <entry key="app/src/main/res/layout/activity_join.xml" value="0.13229166666666667" />
+        <entry key="app/src/main/res/layout/activity_join.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.24959106445312496" />
         <entry key="app/src/main/res/layout/activity_open.xml" value="0.28229166666666666" />
@@ -30,7 +30,7 @@
         <entry key="app/src/main/res/layout/item_message_list.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/layout/item_remote_peer.xml" value="0.13229166666666667" />
         <entry key="app/src/main/res/layout/open_activity.xml" value="0.28125" />
-        <entry key="app/src/main/res/layout/party_room_layout.xml" value="0.13229166666666667" />
+        <entry key="app/src/main/res/layout/party_room_layout.xml" value="0.25" />
         <entry key="app/src/main/res/layout/user_item.xml" value="0.13229166666666667" />
         <entry key="app/src/main/res/menu/menu_logout.xml" value="0.28229166666666666" />
       </map>

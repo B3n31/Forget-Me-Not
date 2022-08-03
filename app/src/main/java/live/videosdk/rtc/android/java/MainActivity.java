@@ -82,8 +82,8 @@ import live.videosdk.rtc.android.model.LivestreamOutput;
 public class MainActivity extends AppCompatActivity {
     private static Meeting meeting;
     private SurfaceViewRenderer svrShare;
-    private FloatingActionButton btnMic, btnWebcam, btnScreenShare;
-    private FloatingActionButton btnLeave, btnChat, btnSwitchCameraMode, btnMore;
+    private FloatingActionButton btnMic, btnWebcam;
+    private FloatingActionButton btnLeave, btnChat;
     private ImageButton btnAudioSelection;
     private Button musicBtn, stopBtn;
 
@@ -93,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
     private boolean webcamEnabled = true;
     private boolean recording = false;
     private boolean livestreaming = false;
-    private boolean localScreenShare = false;
     private boolean isNetworkAvailable = true;
 
     private List<String> uIds;
@@ -125,9 +124,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         btnLeave = findViewById(R.id.btnLeave);
         btnChat = findViewById(R.id.btnChat);
-        btnMore = findViewById(R.id.btnMore);
-        btnSwitchCameraMode = findViewById(R.id.btnSwitchCameraMode);
-        btnScreenShare = findViewById(R.id.btnScreenShare);
         uIds = new ArrayList<>();
         musicBtn = findViewById(R.id.musicBtn);
         stopBtn = findViewById(R.id.stopBtn);
@@ -485,10 +481,7 @@ public class MainActivity extends AppCompatActivity {
             btnMic.setEnabled(true);
             btnWebcam.setEnabled(true);
             btnLeave.setEnabled(true);
-            btnSwitchCameraMode.setEnabled(true);
             btnChat.setEnabled(true);
-            btnScreenShare.setEnabled(true);
-            btnMore.setEnabled(true);
             btnAudioSelection.setEnabled(true);
 
 
@@ -622,21 +615,17 @@ public class MainActivity extends AppCompatActivity {
             return;
         if (resultCode != Activity.RESULT_OK) {
             Toast.makeText(MainActivity.this, "You didn't give permission to capture the screen.", Toast.LENGTH_SHORT).show();
-            localScreenShare = false;
             return;
         }
         meeting.enableScreenShare(data);
-        btnScreenShare.setImageResource(R.drawable.ic_outline_stop_screen_share_24);
     }
 
     private void updatePresenter(String participantId) {
         if (participantId == null) {
             svrShare.clearImage();
             svrShare.setVisibility(View.GONE);
-            btnScreenShare.setEnabled(true);
             return;
         } else {
-            btnScreenShare.setEnabled(meeting.getLocalParticipant().getId().equals(participantId));
         }
 
         // find participant
@@ -673,7 +662,6 @@ public class MainActivity extends AppCompatActivity {
 
                     svrShare.clearImage();
                     svrShare.setVisibility(View.GONE);
-                    localScreenShare = false;
                 }
             }
         });
@@ -740,7 +728,6 @@ public class MainActivity extends AppCompatActivity {
                     VideoTrack videoTrack = (VideoTrack) stream.getTrack();
                     videoTrack.addSink(svrShare);
                     //
-                    localScreenShare = true;
                 }
             }
 
@@ -758,19 +745,11 @@ public class MainActivity extends AppCompatActivity {
                     svrShare.clearImage();
                     svrShare.setVisibility(View.GONE);
                     //
-                    localScreenShare = false;
                 }
             }
         });
     }
 
-    private void copyTextToClipboard(String text) {
-        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText("Copied text", text);
-        clipboard.setPrimaryClip(clip);
-
-        Toast.makeText(MainActivity.this, "Copied to clipboard!", Toast.LENGTH_SHORT).show();
-    }
 
 
     private void setActionListeners() {
@@ -797,34 +776,14 @@ public class MainActivity extends AppCompatActivity {
             showLeaveOrEndDialog();
         });
 
-        btnMore.setOnClickListener(v -> showMoreOptionsDialog());
 
-        btnSwitchCameraMode.setOnClickListener(view -> {
-            meeting.changeWebcam();
-        });
 
         // Chat
         btnChat.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, ChatActivity.class);
             startActivity(intent);
         });
-
-        //
-        btnScreenShare.setOnClickListener(view -> {
-            toggleScreenSharing();
-        });
     }
-
-    private void toggleScreenSharing() {
-        if (!localScreenShare) {
-            askPermissionForScreenShare();
-        } else {
-            meeting.disableScreenShare();
-            btnScreenShare.setImageResource(R.drawable.ic_outline_screen_share_24);
-        }
-        localScreenShare = !localScreenShare;
-    }
-
 
     private void showLeaveOrEndDialog() {
 
@@ -871,28 +830,7 @@ public class MainActivity extends AppCompatActivity {
                 .show();
     }
 
-    private void showMoreOptionsDialog() {
-        final String[] items = new String[]{
-                recording ? "Stop recording" : "Start recording",
-                livestreaming ? "Stop livestreaming" : "Start livestreaming"
-        };
 
-        new MaterialAlertDialogBuilder(MainActivity.this)
-                .setTitle(getString(R.string.more_options))
-                .setItems(items, (dialog, which) -> {
-                    switch (which) {
-                        case 0: {
-                            toggleRecording();
-                            break;
-                        }
-                        case 1: {
-                            toggleLivestreaming();
-                            break;
-                        }
-                    }
-                })
-                .show();
-    }
 
     private void toggleRecording() {
         if (!recording) {

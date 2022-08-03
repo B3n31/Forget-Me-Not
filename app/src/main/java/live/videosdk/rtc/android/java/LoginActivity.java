@@ -43,8 +43,7 @@ public class LoginActivity extends AppCompatActivity {
         textView = findViewById(R.id.ToRegisterTv);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Forget Me Not");
-
+        toolbar.setTitle("Login");
 
         // Firebase Auth
         auth = FirebaseAuth.getInstance();

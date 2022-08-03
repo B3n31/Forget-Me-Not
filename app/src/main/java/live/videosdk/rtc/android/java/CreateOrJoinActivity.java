@@ -52,7 +52,7 @@ public class CreateOrJoinActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_or_join);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Forget Me Not");
+        toolbar.setTitle("Create or Join");
 
         setSupportActionBar(toolbar);
 

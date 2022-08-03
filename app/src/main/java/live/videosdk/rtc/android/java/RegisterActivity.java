@@ -48,7 +48,7 @@ public class RegisterActivity extends AppCompatActivity {
         tv = findViewById(R.id.ToLoginTv);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Forget Me Not");
+        toolbar.setTitle("Register");
 
         // Firebase Auth
         auth = FirebaseAuth.getInstance();
