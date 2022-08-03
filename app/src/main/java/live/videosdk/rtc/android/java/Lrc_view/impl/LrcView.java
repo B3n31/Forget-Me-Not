@@ -96,15 +96,15 @@ public class LrcView extends View implements ILrcView {
     /**
      * default text size
      **/
-    private int mLrcFontSize = 80;    // font size of lrc
+    private int mLrcFontSize = 63;    // font size of lrc
     /**
      * text min size
      **/
-    private int mMinLrcFontSize = 70;
+    private int mMinLrcFontSize = 60;
     /**
      * text max size
      **/
-    private int mMaxLrcFontSize = 120;
+    private int mMaxLrcFontSize = 90;
 
     /**
      * The spacing between two lines of lyrics
