@@ -177,7 +177,6 @@ public class MainActivity extends AppCompatActivity {
                 if (index > 1){
                     if (mPlayer.isPlaying()){
                         mPlayer.stop();
-                        //mLrcView.setLrc(null);
                     }
                 }
                 beginLrcPlay(num_song);
@@ -794,6 +793,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showLeaveOrEndDialog() {
+
         new MaterialAlertDialogBuilder(MainActivity.this)
                 .setTitle("Leave or End meeting")
                 .setMessage("Leave from meeting or end the meeting for everyone ?")
