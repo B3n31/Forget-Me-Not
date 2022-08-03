@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
     private String lrc;
     private String meetingId;
     private int num_song = 1;
-    private int index = 0;
+    private int index = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,20 +170,27 @@ public class MainActivity extends AppCompatActivity {
 
             }
     });
+
         musicBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (index > 0){
+                if (index > 1){
                     if (mPlayer.isPlaying()){
                         mPlayer.stop();
                         //mLrcView.setLrc(null);
                     }
                 }
                 beginLrcPlay(num_song);
-                num_song++;
                 index++;
+                if (index % 2 == 1){
+                    num_song = 1;
+                }
+                else if (index % 2 == 0){
+                    num_song = 2;
+                }
             }
         });
+
         stopBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -345,8 +352,8 @@ public class MainActivity extends AppCompatActivity {
             //Start PreparedListener
             mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 //Finishing prepare
-                public void onPrepared(MediaPlayer mp) {
-                    mp.start();
+                public void onPrepared(MediaPlayer mPlayer) {
+                    mPlayer.start();
                     if(mTimer == null){
                         mTimer = new Timer();
                         mTask = new LrcTask();
