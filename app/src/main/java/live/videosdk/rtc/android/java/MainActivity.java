@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
         FirebaseDatabase.getInstance().getReference("Rooms").child(meetingId).child(auth.getCurrentUser().
                 getUid()).child("Role").setValue(getIntent().getStringExtra("Role"));
 
-        FirebaseDatabase.getInstance().getReference().child("MyUsers").addChildEventListener(new ChildEventListener() {
+        FirebaseDatabase.getInstance().getReference("Rooms").child(meetingId).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 uIds.add(snapshot.getKey());
