@@ -316,13 +316,13 @@ public class MainActivity extends AppCompatActivity {
         HashMap<String, String> dataMap = new HashMap<>();
         dataMap.put("music", song);
         for(int i = 0 ; i < uIds.size() ; i++ ) {
-            FirebaseDatabase.getInstance().getReference().child("MyUsers").child(uIds.get(i)).child("play_this_link").push().setValue(dataMap);
+            FirebaseDatabase.getInstance().getReference().child(meetingId).child(uIds.get(i)).child("play_this_link").push().setValue(dataMap);
         }
         for(int i = 0 ; i < uIds.size() ; i++ ){
             String finalSong = song;
             int finalNum_song = num_song;
             String finalSong1 = song;
-            FirebaseDatabase.getInstance().getReference().child("MyUsers").child(uIds.get(i)).child("play_this_link").addValueEventListener(new ValueEventListener() {
+            FirebaseDatabase.getInstance().getReference().child(meetingId).child(uIds.get(i)).child("play_this_link").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     linkOfTheSong = finalSong;
