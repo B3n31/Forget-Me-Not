@@ -38,3 +38,7 @@ Click Sync Project with Gradle Files on the right side of the toolbar.
 
 ### Step 5: Run the sample app
 Run the android app with **Shift+F10** or the ** ▶ Run ** from toolbar. 
+
+## Demo Video:
+
+https://drive.google.com/file/d/1GkY3JTDvdSPX6jr9SeQi1jcUCpX_MlUx/view?usp=drive_link
